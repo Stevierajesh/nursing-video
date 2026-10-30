@@ -1,0 +1,22 @@
+# Installed dependencies and generated output
+node_modules/
+remotion/out/
+remotion/dist/
+*.tsbuildinfo
+*.log
+.DS_Store
+
+# Local credentials and agent configuration
+.env
+.env.*
+!.env.example
+.claude/
+.agents/
+CODEX-BRIEF.md
+
+# Capture workspace: raw takes, generated frames, and scripts with demo logins
+/build/
+
+# Delivered movies and original reference video; source assets live in public/
+/*.mp4
+
