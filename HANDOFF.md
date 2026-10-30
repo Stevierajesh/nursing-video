@@ -16,6 +16,11 @@ Lint/TypeScript, full preview playback (no page errors), representative stills,
 and main Studio loading checked. User should review this direction before any
 broader demo restructure. No new MP4 export.
 
+Latest prototype revision: removed the selected “Just a feeling” chip at the
+user's request. No optional reason is selected; the full swelling/cramping note
+supplies the observations. Refreshed both captures and API fixtures so the charge
+queue also omits that reason. Yellow review behavior is unchanged.
+
 This directory is a local Git repository with its baseline on `main`. The initial checkpoint
 is tagged `baseline-before-response-flow` and contains the latest source edits
 (including the typography-only Timmy intro), before any charge-nurse workflow

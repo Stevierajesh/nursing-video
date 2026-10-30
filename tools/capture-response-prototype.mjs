@@ -52,7 +52,7 @@ async function makePage(role, port) {
     else if(method==='GET'&&path==='/api/v1/dashboard/summary')body={active_patients:1,open_escalations:review?1:0,sla_breaches:0};
     else if(method==='POST'&&path==='/api/v1/worry'){
       const data=req.postDataJSON();
-      if(data.level!==4||data.note!==fixture.note||!data.reasons.includes('just_a_feeling'))throw Error('Unexpected demo submission');
+      if(data.level!==4||data.note!==fixture.note||data.reasons.length!==0)throw Error('Unexpected demo submission');
       phase='submitted';body=fixture.submitted;
     }else if(method==='POST'&&path==='/api/v1/escalations/demo-review/acknowledge'){
       phase='acknowledged';body={escalation:fixture.acknowledged};
@@ -82,7 +82,8 @@ try {
   nurse.mark('baseline');await nurse.page.screenshot({path:out+'baseline.png'});await nurse.page.waitForTimeout(1800);
   nurse.mark('selection');await nurse.tap(nurse.page.getByRole('button',{name:'Very worried',exact:true}));
   await nurse.page.waitForTimeout(500);
-  nurse.mark('reason');await nurse.tap(nurse.page.getByRole('button',{name:'Just a feeling',exact:true}));
+  // The note supplies the observed findings; no optional reason chip is selected.
+  await nurse.page.waitForTimeout(1000);
   nurse.mark('note');const field=nurse.page.getByPlaceholder('In your words — this goes to the charge nurse.');
   await nurse.tap(field);await field.pressSequentially(fixture.note,{delay:26});
   await nurse.page.waitForTimeout(800);nurse.mark('submit');await nurse.tap(nurse.page.getByRole('button',{name:'Submit score',exact:true}));

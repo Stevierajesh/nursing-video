@@ -72,7 +72,7 @@ with patch.object(Query, "execute", execute), patch.object(DB, "rpc", rpc), \
         before = compute_risk(vitals, [])
         with patch("app.api.worry.supabase", return_value=database):
             response = client.post("/api/v1/worry", json=dict(patient_id="p1", level=4,
-                                   reasons=["just_a_feeling"], note=note, capture_ms=9000))
+                                   reasons=[], note=note, capture_ms=9000))
         assert response.status_code == 201, response.get_json()
         submitted = response.get_json()
         assert submitted["escalation"]["rule"] == "nurse_concern"
