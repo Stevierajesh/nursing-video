@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, Audio, Easing, OffthreadVideo, Sequence, Series, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { C, Eyebrow, Head, Sub } from "./Type";
 
-const ENTRY_FRAMES = 320;
+const ENTRY_FRAMES = 350;
 const RESULT_FRAMES = 135;
 const NOTIFICATION_FRAMES = 180;
 const QUEUE_FRAMES = 120;
@@ -54,8 +54,8 @@ const ConcernEntry: React.FC = () => (
       { frame: 65, x: 1080, y: 180, zoom: 1.8 },
       { frame: 100, x: 1080, y: 230, zoom: 1.8 },
       { frame: 150, x: 1080, y: 440, zoom: 1.9 },
-      { frame: 272, x: 1080, y: 440, zoom: 1.9 },
-      { frame: 300, x: 1080, y: 540, zoom: 1.7 },
+      { frame: 302, x: 1080, y: 440, zoom: 1.9 },
+      { frame: 330, x: 1080, y: 540, zoom: 1.7 },
       { frame: ENTRY_FRAMES, ...RESULT_POSE },
     ]}>
       <OffthreadVideo src={staticFile("response-prototype/nurse.webm")} startFrom={12} muted style={{ width: "100%", height: "100%" }} />

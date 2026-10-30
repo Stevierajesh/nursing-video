@@ -3,7 +3,7 @@
 ## Current status
 
 **Response-flow prototype is ready for review** on branch `response-flow-prototype`:
-http://localhost:3000/ResponseFlow-Prototype (755 frames / 25.17 s). This is a
+http://localhost:3000/ResponseFlow-Prototype (785 frames / 26.17 s). This is a
 separate composition; SalusDemo and the delivered MP4 retain the baseline edit.
 The prototype films the current nurse and charge frontends in an offline browser
 rehearsal: stable vitals, Very worried, yellow review confirmation, charge popup,
@@ -19,7 +19,9 @@ broader demo restructure. No new MP4 export.
 Latest prototype revision: removed the selected “Just a feeling” chip at the
 user's request. No optional reason is selected; the full swelling/cramping note
 supplies the observations. Refreshed both captures and API fixtures so the charge
-queue also omits that reason. Yellow review behavior is unchanged.
+queue also omits that reason. Yellow review behavior is unchanged. Extended the
+entry by one second to preserve the complete note and submit in the new capture;
+the main film and its music timing remain baseline.
 
 This directory is a local Git repository with its baseline on `main`. The initial checkpoint
 is tagged `baseline-before-response-flow` and contains the latest source edits
