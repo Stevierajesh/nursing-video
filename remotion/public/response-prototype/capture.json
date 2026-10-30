@@ -1,0 +1,24 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "nurse": {
+    "baseline": 0.411,
+    "selection": 2.26,
+    "reason": 3.775,
+    "note": 4.767,
+    "submit": 10.129,
+    "result": 11.12,
+    "end": 1793394480835,
+    "video": "response-prototype/nurse.webm"
+  },
+  "charge": {
+    "popup": 16.76,
+    "acknowledge": 19.797,
+    "acknowledged": 20.798,
+    "queue": 22.383,
+    "end": 1793394481787,
+    "video": "response-prototype/charge.webm"
+  },
+  "errors": [],
+  "unexpected": []
+}

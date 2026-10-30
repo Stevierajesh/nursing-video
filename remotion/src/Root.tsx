@@ -4,6 +4,7 @@ import { MyComposition, TOTAL, FPS, TimmyIntroductionPreview, INTRO_PREVIEW_FRAM
 import { ColdOpen, TheGap, LogoResolve, Outro, TypographyReview,
   COLD_OPEN_FRAMES, GAP_FRAMES, LOGO_FRAMES, OPENING_FRAMES, OUTRO_FRAMES } from "./TypeActs";
 import { Act9Recovery, ACT9_FRAMES } from "./Act9Recovery";
+import { ResponseFlowPrototype, RESPONSE_PROTOTYPE_FRAMES } from "./ResponseFlowPrototype";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ export const RemotionRoot: React.FC = () => {
       width={1920}
       height={1080}
     />
+    <Composition id="ResponseFlow-Prototype" component={ResponseFlowPrototype} durationInFrames={RESPONSE_PROTOTYPE_FRAMES} fps={30} width={1920} height={1080} />
     <Folder name="Typography">
       <Composition id="MeetTimmy" component={TimmyIntroductionPreview} durationInFrames={INTRO_PREVIEW_FRAMES} fps={30} width={1920} height={1080} />
       <Composition id="TypographyReview" component={TypographyReview} durationInFrames={OPENING_FRAMES + OUTRO_FRAMES} fps={30} width={1920} height={1080} />

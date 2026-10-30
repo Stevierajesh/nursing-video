@@ -2,7 +2,21 @@
 
 ## Current status
 
-This directory is now a local Git repository on `main`. The initial checkpoint
+**Response-flow prototype is ready for review** on branch `response-flow-prototype`:
+http://localhost:3000/ResponseFlow-Prototype (755 frames / 25.17 s). This is a
+separate composition; SalusDemo and the delivered MP4 retain the baseline edit.
+The prototype films the current nurse and charge frontends in an offline browser
+rehearsal: stable vitals, Very worried, yellow review confirmation, charge popup,
+acknowledgment, and the response queue with assessment pending. A persistent label
+identifies the rehearsal. Real backend API/risk/acknowledgment logic generated
+responses through its in-memory test harness; database RPC/storage is mocked.
+No live clinical writes or notification-delivery claim. See tools/README.md.
+Music is auditioned from main frame 1235; main-film music/cues are unchanged.
+Lint/TypeScript, full preview playback (no page errors), representative stills,
+and main Studio loading checked. User should review this direction before any
+broader demo restructure. No new MP4 export.
+
+This directory is a local Git repository with its baseline on `main`. The initial checkpoint
 is tagged `baseline-before-response-flow` and contains the latest source edits
 (including the typography-only Timmy intro), before any charge-nurse workflow
 restructure. Source media is tracked; exports, capture workspace, credentials

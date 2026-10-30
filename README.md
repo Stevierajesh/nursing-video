@@ -10,6 +10,11 @@ Open <http://localhost:3000/SalusDemo>.
 
 ## Saved versions
 
+The new response-flow audition is at
+<http://localhost:3000/ResponseFlow-Prototype> on branch
+`response-flow-prototype`. It is separate from the baseline full film. See
+[tools/README.md](tools/README.md) for capture details and verification limits.
+
 This repository tracks the composition, source media in `remotion/public/`,
 storyboard, and handoff notes. It is local; no remote is configured by this setup.
 
