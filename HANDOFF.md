@@ -2,6 +2,14 @@
 
 ## Current status
 
+Timmy introduction extended by two seconds: 225 frames / 7.5 s total, with
+the same 36-frame slide. Complete text now holds about 3.4 s before the transition.
+First assessment starts at frame 1295; following scenes move +60 frames. Main
+film is 4916 frames / 163.87 s; opening/logo and main music placement are fixed.
+Standalone response-preview audio now derives its offset from shared timings.
+Lint/TypeScript and composition metadata pass; main frame 1280 checked at
+remotion/out/timmy-longer-hold.png. No MP4 export.
+
 Watch time-lapse now displays clock time (5:01 PM → 5:11 PM) instead of T+elapsed.
 The large clock, observation header and replay history share a deterministic
 5:01:25 PM baseline matching the first-assessment capture. Demo/simulation labels
@@ -12,7 +20,7 @@ Latest reassessment update: replaced the old diagnostic wording with “Concerne
 about deterioration. BP falling, heart rate and breathing rising. Please assess.”
 Fresh browser rehearsal of current nurse UI uses Breathing off and faster typing
 (8 ms input delay; approximately 1.6 s in the edit), then a full-note hold. The
-same 538-frame Act 6, five-second 6/10 result hold and main 4856-frame timing are
+same 538-frame Act 6, five-second 6/10 result hold and main 4916-frame timing are
 preserved. New source and fixtures: remotion/public/reassessment/. Existing
 acknowledgment survives the new concern; the current API response replaces the
 obsolete no-page confirmation. No live clinical writes.
@@ -21,15 +29,15 @@ Latest pacing adjustment: the calm first-assessment view holds an extra three
 seconds before interaction starts, with subtext exactly “Everything seemed normal”.
 It lasts 140 frames / 4.67 s including the intro transition. Held baseline source
 frame precedes the same uninterrupted interaction; camera/caption keys move with
-it. Main film is now 4856 frames / 161.87 s; response preview is 875 / 29.17 s.
+it. Main film is now 4916 frames / 163.87 s; response preview is 875 / 29.17 s.
 Music and opening/logo placement unchanged. Lint/TypeScript pass; still checked
 at main frame 1345 in remotion/out/calm-longer-hold.png.
 
 **Integrated into SalusDemo, 2026-10-31:** The new light charge-nurse response
 flow now replaces the old first assessment in the main film and Act4 preview.
 Main preview: http://localhost:3000/SalusDemo. First assessment remains at frame
-1235 and now lasts 875 frames. Later scenes ripple +268 frames / 8.93 s; full
-film is 4856 frames / 161.87 s. The main soundtrack stays in place with one audio
+1295 and now lasts 875 frames. Later scenes ripple +268 frames / 8.93 s; full
+film is 4916 frames / 163.87 s. The main soundtrack stays in place with one audio
 track; standalone response preview retains its own audition audio. Logo remains
 at frame 956. Timmy's 36-frame slide and the user's device +2px adjustment are
 preserved. Time-lapse status/copy now carries acknowledged / assessment pending
@@ -102,15 +110,15 @@ The full film was rendered and delivered. On 2026-10-30, two opening copy change
 | Act 0 cold open | 0 | 480 |
 | Act 1 evidence | 480 | 251 |
 | Act 2 bridge, question, brand | 731 | 375 |
-| Meet Timmy | 1106 | 165, overlapping next section by 36 |
-| First assessment + charge response | 1235 | 875 |
-| Act 5 watch/time-lapse | 2110 | 360 |
-| Act 6 reassessment | 2470 | 538 |
-| Act 7 escalation | 3008 | 570 |
-| Act 8 physician review | 3578 | 783 |
-| Act 9 recovery/recap | 4361 | 360 |
-| Outro | 4721 | 135 |
-| End | 4856 | |
+| Meet Timmy | 1106 | 225, overlapping next section by 36 |
+| First assessment + charge response | 1295 | 875 |
+| Act 5 watch/time-lapse | 2170 | 360 |
+| Act 6 reassessment | 2530 | 538 |
+| Act 7 escalation | 3068 | 570 |
+| Act 8 physician review | 3638 | 783 |
+| Act 9 recovery/recap | 4421 | 360 |
+| Outro | 4781 | 135 |
+| End | 4916 | |
 
 Timing is derived from shared source constants; update those rather than duplicating absolute offsets when editing.
 
@@ -136,7 +144,7 @@ Act 2 is now: “Her concern deserved more than a note. It needed a response.”
 
 Brand reveal: emblem begins at main frame 956; INTRODUCING fades in; SALUS wordmark follows; then “HEAR THE WORRY. ACT ON TIME.” Shared styles/emblem are in `Type.tsx` and `Sun.tsx`.
 
-`PatientIntro.tsx`: typography-only introduction, approved for trial on 2026-10-30. Small “A DEMONSTRATION CASE” label, short teal rule, large serif “Meet Timmy Buttons.”, then “51 years old · Room 609” and “Admitted with swelling in his feet and legs, with cramping.” Removed the cartoon and circle from the slide; asset remains on disk. Text uses staggered 24-frame reveals. Intro remains 5.5 seconds, with the existing 1.2-second sliding overlap into the iPad view. Lint/TypeScript pass; stills timmy-type-intro.png and timmy-type-transition.png visually checked in remotion/out. MP4 predates this redesign.
+`PatientIntro.tsx`: typography-only introduction, approved for trial on 2026-10-30. Small “A DEMONSTRATION CASE” label, short teal rule, large serif “Meet Timmy Buttons.”, then “51 years old · Room 609” and “Admitted with swelling in his feet and legs, with cramping.” Removed the cartoon and circle from the slide; asset remains on disk. Text uses staggered 24-frame reveals. Intro now lasts 7.5 seconds, with the existing 1.2-second sliding overlap into the iPad view. Lint/TypeScript pass; stills timmy-type-intro.png and timmy-type-transition.png visually checked in remotion/out. MP4 predates this redesign.
 
 ## First assessment and Act 5
 

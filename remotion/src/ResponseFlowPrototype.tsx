@@ -1,7 +1,8 @@
 import React from "react";
 import { AbsoluteFill, Audio, Easing, Freeze, OffthreadVideo, Sequence, Series, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { C, Eyebrow, Head, Sub } from "./Type";
-import { PATIENT_SLIDE_FRAMES } from "./PatientIntro";
+import { PATIENT_INTRO_FRAMES, PATIENT_SLIDE_FRAMES } from "./PatientIntro";
+import { OPENING_FRAMES } from "./TypeActs";
 
 const BASELINE_HOLD_FRAMES = 90;
 const ENTRY_FRAMES = 350 + BASELINE_HOLD_FRAMES;
@@ -122,7 +123,7 @@ export const ResponseFlowPrototype: React.FC<{ withMusic?: boolean; slideIn?: bo
     })}px 0` : undefined,
   }}>
     {/* Audition against the music at the existing first-assessment position. */}
-    {withMusic && <Audio src={staticFile("b51-q2.wav")} startFrom={1235} />}
+    {withMusic && <Audio src={staticFile("b51-q2.wav")} startFrom={OPENING_FRAMES + PATIENT_INTRO_FRAMES - PATIENT_SLIDE_FRAMES} />}
     <Series>
       <Series.Sequence name="Record the concern" durationInFrames={ENTRY_FRAMES}><ConcernEntry /></Series.Sequence>
       <Series.Sequence name="Yellow review confirmation" durationInFrames={RESULT_FRAMES}><ReviewRequested /></Series.Sequence>

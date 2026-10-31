@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, interpolate, Easing, useCurrentFrame, useVideoConfig } from "remotion";
 import { C, Eyebrow, Head, Sub } from "./Type";
 
-export const PATIENT_INTRO_FRAMES = 165; // 4.3 s to meet Timmy, then a 1.2 s slide.
+export const PATIENT_INTRO_FRAMES = 225; // 6.3 s to meet Timmy, then a 1.2 s slide.
 export const PATIENT_SLIDE_FRAMES = 36;
 
 // One push transition: the introduction exits left as the live iPad enters.

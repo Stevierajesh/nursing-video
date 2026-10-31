@@ -4,7 +4,7 @@ The `ResponseFlow-Prototype` composition is a separate audition of the new
 concern → yellow review → charge notification → acknowledgment flow. As of
 2026-10-31 it is also used by `SalusDemo` and `Act4-FirstAssessment`. In the main
 film its audition audio is disabled, so only the main soundtrack plays. The main
-film now lasts 4856 frames / 161.87 s; music and opening logo placement stay fixed.
+film now lasts 4916 frames / 163.87 s; music and opening logo placement stay fixed.
 
 The recordings use the current nurse app and charge console, with browser-scoped
 API interception. Fake sessions contain no real login credentials. All API
@@ -37,7 +37,7 @@ If re-recording changes action times, update the source trims and camera keys
 in `remotion/src/ResponseFlowPrototype.tsx` using the new capture marks.
 
 The preview plays the approved music from the existing first-assessment offset
-(frame 1235). It does not move the music in the main film.
+(derived from the current opening and Timmy intro timing). It does not move the music in the main film.
 
 The charge capture now uses the real dashboard's SALUS light theme and branding
 (nursing-dashboard commit `cbdfa6f`), matching the nurse app's palette, sun logo

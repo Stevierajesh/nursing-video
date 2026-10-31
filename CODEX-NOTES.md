@@ -361,3 +361,7 @@ ReassessmentFootage now uses source0.4–11s for the first388 composition frames
 ## Clock time in the monitoring replay
 
 User requested actual time instead of the T+ counter. WatchTimeLapse.tsx now formats all clock/header/history timestamps as 12-hour time, using a fixed 5:01:25 PM baseline matching the first-assessment capture (2026-10-31 21:01:25 UTC). Visible range 5:01 PM→5:11 PM. Uses arithmetic formatting to avoid renderer time-zone differences. Existing demo/simulated labels, progress, observation animation, durations and music stay unchanged. Lint/TypeScript pass; main frame2264 at remotion/out/watch-clock-time.png visually checked. No MP4 export.
+
+## Give Timmy's introduction two more seconds
+
+User requested about two more seconds so the case details are digestible. PatientIntro now225 frames /7.5s (was165/5.5s); text reveals unchanged, complete text holds ~3.4s before the same36-frame/1.2s slide. First assessment starts1295, watch2170, reassessment2530, escalation3068, physician3638, recovery4421, outro4781, main end4916/163.87s. Opening/logo cue and main music placement unchanged. Standalone response music offset now derives from OPENING_FRAMES + PATIENT_INTRO_FRAMES - PATIENT_SLIDE_FRAMES rather than hardcoded1235. Lint/TypeScript pass; composition metadata confirms4916 main /339 MeetTimmy. Main still1280 visually checked at remotion/out/timmy-longer-hold.png. No MP4 export.
