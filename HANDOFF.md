@@ -23,6 +23,15 @@ queue also omits that reason. Yellow review behavior is unchanged. Extended the
 entry by one second to preserve the complete note and submit in the new capture;
 the main film and its music timing remain baseline.
 
+2026-10-31: Charge dashboard now matches the nurse app's light palette and SALUS
+branding (same sun SVG, Bree Serif wordmark/font, teal controls). Actual dashboard
+changes are committed separately in nursing-dashboard as cbdfa6f, preserving its
+pre-existing uncommitted workflow changes. Refreshed both rehearsal recordings;
+the prototype now shows the light charge popup and response queue. Timing stays
+785 frames / 26.17 s, approved music offset unchanged. Dashboard build and five
+notification tests pass; lint has existing warnings. Login/board/popup/queue and
+Remotion representative frame checked. No live clinical writes or full MP4 export.
+
 This directory is a local Git repository with its baseline on `main`. The initial checkpoint
 is tagged `baseline-before-response-flow` and contains the latest source edits
 (including the typography-only Timmy intro), before any charge-nurse workflow

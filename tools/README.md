@@ -36,3 +36,7 @@ in `remotion/src/ResponseFlowPrototype.tsx` using the new capture marks.
 
 The preview plays the approved music from the existing first-assessment offset
 (frame 1235). It does not move the music in the main film.
+
+The charge capture now uses the real dashboard's SALUS light theme and branding
+(nursing-dashboard commit `cbdfa6f`), matching the nurse app's palette, sun logo
+and Bree Serif wordmark. These are frontend source changes, not capture overlays.
