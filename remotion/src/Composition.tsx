@@ -333,11 +333,11 @@ export const Act5Watch: React.FC = () => (
 
 export const Act7Escalation: React.FC = () => (
   <AbsoluteFill style={{ background: C.canvas }}>
-    <Sequence name="Act 7: Concern and observations agree" durationInFrames={90}>
+    <Sequence name="Act 7: Concern heard, assessment pending" durationInFrames={90}>
       <Scene dur={90} center>
         <Eyebrow>3 · Escalate</Eyebrow>
-        <Head size={88}>Now the nurse and<br />the vitals agree.</Head>
-        <Sub>Human concern. Objective change.</Sub>
+        <Head size={88}>The concern was heard.</Head>
+        <Sub>The patient still needs assessment.</Sub>
       </Scene>
     </Sequence>
     <Sequence name="Act 7: Actual overdue escalation" from={90} durationInFrames={135}>

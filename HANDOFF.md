@@ -2,6 +2,11 @@
 
 ## Current status
 
+Act 7 opening now reads “The concern was heard.” / “The patient still needs
+assessment.” in place of “Now the nurse and the vitals agree.” / “Human concern.
+Objective change.” Same 90-frame scene and styling; main and standalone Act7
+share it. Lint/TypeScript pass; still checked at remotion/out/escalation-assessment-pending.png.
+
 Acknowledgment scene copy shortened to “Concern acknowledged.” with “Patient
 assessment still pending.” underneath. Replaces the longer two-part headline
 and explanatory paragraph; applies to main and response preview. Timing unchanged.

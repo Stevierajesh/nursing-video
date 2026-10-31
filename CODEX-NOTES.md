@@ -375,3 +375,7 @@ Re-recorded nurse and charge rehearsal UI using these fixtures; expected concern
 ## Shorter acknowledgment copy
 
 User found the acknowledged/assessment-pending scene too wordy. Changed headline to “Concern acknowledged.” and supporting line to “Patient assessment still pending.” in shared ResponseFlowPrototype. Both main film and preview inherit it; timing/music unchanged. Lint/TypeScript pass; preview frame820 visually checked at remotion/out/acknowledgment-short-copy.png. No MP4 export.
+
+## Update the escalation bridge to the new story
+
+User approved replacing Act7's obsolete “Now the nurse and the vitals agree” frame. New headline “The concern was heard.” and subtitle “The patient still needs assessment.” Existing 90-frame duration, typography, scene placement and music unchanged. Timeline sequence renamed to match. Lint/TypeScript pass; Act7 frame60 visually checked at remotion/out/escalation-assessment-pending.png. Shared by main and standalone preview. No MP4 export.
