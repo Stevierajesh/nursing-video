@@ -2,6 +2,12 @@
 
 ## Current status
 
+Watch time-lapse now displays clock time (5:01 PM → 5:11 PM) instead of T+elapsed.
+The large clock, observation header and replay history share a deterministic
+5:01:25 PM baseline matching the first-assessment capture. Demo/simulation labels
+remain. Scene lengths, readings and music unchanged. Lint/TypeScript pass;
+main frame 2264 visually checked at remotion/out/watch-clock-time.png.
+
 Latest reassessment update: replaced the old diagnostic wording with “Concerned
 about deterioration. BP falling, heart rate and breathing rising. Please assess.”
 Fresh browser rehearsal of current nurse UI uses Breathing off and faster typing

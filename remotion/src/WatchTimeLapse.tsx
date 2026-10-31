@@ -16,9 +16,14 @@ const SERIES = {
 type VitalKey = keyof typeof SERIES;
 const minutesAt = (frame: number) => interpolate(frame, [60, 270], [0, 10], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 const readingAt = (key: VitalKey, minutes: number) => interpolate(minutes, MINUTES, SERIES[key]);
-const elapsed = (minutes: number) => {
-  const seconds = Math.round(minutes * 60);
-  return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+// Match the first-assessment capture's 5:01:25 PM baseline. Format explicitly
+// so the demo clock stays identical in Studio and renders in any time zone.
+const BASELINE_CLOCK_SECONDS = 17 * 3600 + 60 + 25;
+const clockTime = (minutes: number) => {
+  const seconds = BASELINE_CLOCK_SECONDS + Math.round(minutes * 60);
+  const hours = Math.floor(seconds / 3600) % 24;
+  const minute = Math.floor(seconds / 60) % 60;
+  return `${hours % 12 || 12}:${String(minute).padStart(2, "0")} ${hours >= 12 ? "PM" : "AM"}`;
 };
 
 const LiveVital: React.FC<{ field: VitalKey; label: string; unit: string; baseline: string; domain: [number, number] }> = ({ field, label, unit, baseline, domain }) => {
@@ -71,7 +76,7 @@ export const WatchTimeLapseScreen: React.FC = () => {
         <span style={{ color: news ? C.ink : C.low, background: news ? C.line : "#e0efe7", padding: "3px 8px", borderRadius: 6, fontWeight: 700 }}>NEWS {news}</span>
         {minutes >= 4 && <span style={{ color: C.watch, background: "#f3ead9", padding: "3px 8px", borderRadius: 6 }}>↑ trending up</span>}
       </div>
-      <div style={{ fontSize: 10, marginTop: 6 }}>Demo T+{elapsed(minutes)} · RR {Math.round(readingAt("resp_rate", minutes))} · SpO₂ 96% · HR {Math.round(readingAt("heart_rate", minutes))}</div>
+      <div style={{ fontSize: 10, marginTop: 6 }}>Demo {clockTime(minutes)} · RR {Math.round(readingAt("resp_rate", minutes))} · SpO₂ 96% · HR {Math.round(readingAt("heart_rate", minutes))}</div>
     </div>
     <div style={{ position: "absolute", left: 59, top: 242, width: 612, height: 90, boxSizing: "border-box", padding: "13px 16px",
       borderRadius: 18, border: `1px solid ${bandColor}50`, background: "#f3ead9", color: bandColor, boxShadow: `0 0 0 3px ${C.canvas}`,
@@ -87,7 +92,7 @@ export const WatchTimeLapseScreen: React.FC = () => {
       </div>
       <div style={{ fontSize: 12, color: C.ink }}>Presenting with persistent swelling of the feet and legs, with cramping.</div>
       <div style={{ fontSize: 11, color: C.muted, display: "flex", alignItems: "center", gap: 7 }}>
-        <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.teal }} />Simulated observations · T+{elapsed(minutes)}
+        <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.teal }} />Simulated observations · {clockTime(minutes)}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
         <LiveVital field="heart_rate" label="Heart rate" unit="bpm" baseline="78 bpm" domain={[78, 115]} />
@@ -107,7 +112,7 @@ export const WatchTimeLapseScreen: React.FC = () => {
       </div>
       {[minutes, ...MINUTES.filter(minute => minute < minutes).reverse()].slice(0, 8).map((minute, index) => <div key={index}
         style={{ display: "grid", gridTemplateColumns: "1.3fr .7fr .7fr .8fr 1fr .8fr", padding: "12px 8px", borderTop: `1px solid ${C.line}`, color: C.ink, fontVariantNumeric: "tabular-nums" }}>
-        <span>T+{elapsed(minute)}</span><span>{Math.round(readingAt("heart_rate", minute))}</span><span>{Math.round(readingAt("resp_rate", minute))}</span>
+        <span>{clockTime(minute)}</span><span>{Math.round(readingAt("heart_rate", minute))}</span><span>{Math.round(readingAt("resp_rate", minute))}</span>
         <span>96%</span><span>{Math.round(readingAt("systolic_bp", minute))}/{Math.round(readingAt("diastolic_bp", minute))}</span><span>{readingAt("temperature_c", minute).toFixed(1)}°C</span>
       </div>)}
     </div>
@@ -120,7 +125,7 @@ export const WatchClock: React.FC = () => {
   return <div style={{ position: "absolute", left: 1313, top: 160, width: 500, color: C.teal, fontFamily: C.mono,
     opacity: interpolate(frame, [348, 359], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
     <div style={{ fontSize: 18, letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 12 }}>Demo time-lapse</div>
-    <div style={{ fontSize: 62, fontVariantNumeric: "tabular-nums" }}>T+{elapsed(minutes)}</div>
+    <div style={{ fontSize: 62, fontVariantNumeric: "tabular-nums" }}>{clockTime(minutes)}</div>
     <div style={{ height: 4, background: C.line, marginTop: 16, borderRadius: 5 }}>
       <div style={{ width: `${minutes * 10}%`, height: "100%", background: C.teal, borderRadius: 5 }} />
     </div>
