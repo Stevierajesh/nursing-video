@@ -22,6 +22,11 @@ from test_mobile_workflows import env, DB, Query  # noqa: E402
 from app.services.risk import compute_risk, RULE_LABELS  # noqa: E402
 
 now = datetime.now(timezone.utc)
+baseline_motion = "--baseline-motion" in sys.argv
+existing_baseline = ROOT / "remotion/public/response-prototype/fixtures.json"
+if baseline_motion and existing_baseline.exists():
+    # Keep the film's established clock when refreshing the illustrative history.
+    now = datetime.fromisoformat(json.loads(existing_baseline.read_text())["generatedAt"])
 stamp = now.isoformat()
 reassessment = "--reassessment" in sys.argv
 note = "In my experience, I have seen that swelling of the feet while cramping is a symptom of circulatory decline."
@@ -71,6 +76,18 @@ with patch.object(Query, "execute", execute), patch.object(DB, "rpc", rpc), \
                        diastolic_bp=74, temperature_c=36.9, news_score=0,
                        supplemental_o2=False, consciousness="A", glucose_mg_dl=None,
                        pain_score=None) for i in range(4)]
+        if baseline_motion:
+            # Authored demo samples, all within the same NEWS-zero baseline.
+            # Last readings stay identical to the existing film's endpoints.
+            histories = dict(heart_rate=[87,88,89,89,88,87,87,88],
+                resp_rate=[18,18,19,19,18,17,18,18], spo2=[97,97,96,96,97,97,96,96],
+                systolic_bp=[118,119,120,119,118,117,118,118],
+                diastolic_bp=[74,74,75,75,74,73,73,74],
+                temperature_c=[36.8,36.8,36.9,36.9,37.0,36.9,36.8,36.9])
+            template = vitals[-1]
+            vitals = [{**template, "id": f"demo-vital-{i}",
+                "recorded_at": (now-timedelta(seconds=(7-i)*15)).isoformat(),
+                **{key: values[i] for key, values in histories.items()}} for i in range(8)]
         database.rows["vitals"] = list(reversed(vitals))
         patient = dict(id="p1", org_id="a", unit_id="u1", display_name="Timmy Buttons",
                        age=51, age_band="50-59", sex="Male", bed="9B", room="609",
@@ -125,6 +142,8 @@ with patch.object(Query, "execute", execute), patch.object(DB, "rpc", rpc), \
                        generatedAt=stamp, patient=patient, vitals=vitals,
                        initialRisk=initial_risk, submitted=submitted, review=review,
                        acknowledged=acknowledged, note=note)
+        if baseline_motion:
+            payload["illustrativeBaselineHistory"] = True
         if reassessment:
             payload["initialReview"] = initial_review
             payload["initialWorry"] = database.rows["worry_signals"][0]

@@ -58,7 +58,7 @@ const ConcernEntry: React.FC = () => (
   <AbsoluteFill>
     <Device keys={[
       { frame: 0, x: 530, y: 520, zoom: 1.65 },
-      { frame: 40 + BASELINE_HOLD_FRAMES, x: 530, y: 520, zoom: 1.65 },
+      { frame: 40 + BASELINE_HOLD_FRAMES, x: 530, y: 520, zoom: 1.78 },
       { frame: 65 + BASELINE_HOLD_FRAMES, x: 1080, y: 180, zoom: 1.8 },
       { frame: 100 + BASELINE_HOLD_FRAMES, x: 1080, y: 230, zoom: 1.8 },
       { frame: 150 + BASELINE_HOLD_FRAMES, x: 1080, y: 440, zoom: 1.9 },
@@ -73,7 +73,7 @@ const ConcernEntry: React.FC = () => (
           </Freeze>
         </Series.Sequence>
         <Series.Sequence name="Continuous concern entry" durationInFrames={ENTRY_FRAMES - BASELINE_HOLD_FRAMES} layout="none">
-          <OffthreadVideo src={staticFile("response-prototype/nurse.webm")} startFrom={12} muted style={{ width: "100%", height: "100%" }} />
+          <OffthreadVideo src={staticFile("response-prototype/nurse.webm")} startFrom={12} playbackRate={1.04} muted style={{ width: "100%", height: "100%" }} />
         </Series.Sequence>
       </Series>
     </Device>

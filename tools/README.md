@@ -20,7 +20,7 @@ popup uses the app's real polling fallback, without a live Realtime connection.
 To reproduce from the video directory:
 
 ```sh
-../nursing-backend/.venv/bin/python tools/response-fixtures.py
+../nursing-backend/.venv/bin/python tools/response-fixtures.py --baseline-motion
 npm ci --prefix tools
 node tools/capture-response-prototype.mjs
 ```
@@ -42,6 +42,12 @@ The preview plays the approved music from the existing first-assessment offset
 The charge capture now uses the real dashboard's SALUS light theme and branding
 (nursing-dashboard commit `cbdfa6f`), matching the nurse app's palette, sun logo
 and Bree Serif wordmark. These are frontend source changes, not capture overlays.
+
+`--baseline-motion` supplies eight authored baseline history samples with small
+variations, all NEWS 0, retaining the same final readings. It keeps the established
+scenario timestamp from the existing fixture. The capture freezes only browser
+clock time to that scenario time; polling/animation timers continue normally.
+These samples are simulation data, not newly observed patient measurements.
 
 ## Reassessment note
 

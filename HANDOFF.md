@@ -2,6 +2,15 @@
 
 ## Current status
 
+First-assessment baseline is less static: refreshed the rehearsal history with
+eight authored samples showing small variations, all independently NEWS 0, ending
+at the same HR88/RR18/BP118/74/SpO2 96/temp36.9. The calm-view camera gently pushes
+from 1.65× to 1.78× before panning to concern controls. Re-recorded current UI;
+fixed browser clock preserves the established 5:01:25 PM scenario time while
+polling timers continue. Simulated/rehearsal labels remain. Source entry adjusted
+to 1.04× to retain the complete submit in the new capture. Main timing/music
+unchanged (4916 frames). Still checked: remotion/out/baseline-motion-zoom.png.
+
 Timmy introduction extended by two seconds: 225 frames / 7.5 s total, with
 the same 36-frame slide. Complete text now holds about 3.4 s before the transition.
 First assessment starts at frame 1295; following scenes move +60 frames. Main

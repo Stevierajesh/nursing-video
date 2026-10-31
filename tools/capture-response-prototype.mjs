@@ -60,6 +60,8 @@ async function makePage(role, port) {
     await route.fulfill({status:method==='POST'&&path==='/api/v1/worry'?201:200,headers:{'Access-Control-Allow-Origin':'*'},json:body});
   });
   const page=await ctx.newPage();
+  // Keep on-screen demo timestamps fixed while real timers/polling continue.
+  await page.clock.setFixedTime(new Date(fixture.generatedAt));
   page.on('pageerror',e=>errors.push({role,error:e.message}));
   const start=Date.now();
   const mark=name=>{manifest[role][name]=(Date.now()-start)/1000;};
