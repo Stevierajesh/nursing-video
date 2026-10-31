@@ -2,6 +2,10 @@
 
 ## Current status
 
+Acknowledgment scene copy shortened to “Concern acknowledged.” with “Patient
+assessment still pending.” underneath. Replaces the longer two-part headline
+and explanatory paragraph; applies to main and response preview. Timing unchanged.
+
 First-assessment baseline is less static: refreshed the rehearsal history with
 eight authored samples showing small variations, all independently NEWS 0, ending
 at the same HR88/RR18/BP118/74/SpO2 96/temp36.9. The calm-view camera gently pushes

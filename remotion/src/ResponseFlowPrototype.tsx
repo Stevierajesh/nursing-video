@@ -110,7 +110,7 @@ const AssessmentPending: React.FC = () => (
     <Device keys={[{ frame: 0, ...QUEUE_POSE }, { frame: QUEUE_FRAMES, ...QUEUE_POSE }]}>
       <OffthreadVideo src={staticFile("response-prototype/charge.webm")} startFrom={690} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Response tracked" title={<>Acknowledged.<br />Assessment pending.</>}>Seeing the concern is the first step. Assessment is tracked separately.</Caption>
+    <Caption label="Response tracked" title={<>Concern<br />acknowledged.</>}>Patient assessment still pending.</Caption>
   </AbsoluteFill>
 );
 
