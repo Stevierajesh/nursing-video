@@ -42,3 +42,21 @@ The preview plays the approved music from the existing first-assessment offset
 The charge capture now uses the real dashboard's SALUS light theme and branding
 (nursing-dashboard commit `cbdfa6f`), matching the nurse app's palette, sun logo
 and Bree Serif wordmark. These are frontend source changes, not capture overlays.
+
+## Reassessment note
+
+The updated second assessment has its own offline rehearsal capture:
+
+```sh
+../nursing-backend/.venv/bin/python tools/response-fixtures.py --reassessment
+node tools/capture-reassessment.mjs
+```
+
+It uses the previously filmed reassessment observations (HR 129, RR 26,
+BP 75/52, SpO2 96, temperature 36.9), recomputes NEWS 8 and combined score 55
+through current backend logic, and reuses an acknowledged concern review in
+mock storage. No real patient state is changed. The source video, fixtures and
+marks live under `remotion/public/reassessment/`; proof screenshots under
+`build/footage/reassessment/`. The new note is typed at an 8 ms input delay,
+then held before submission. Main Act 6 timing remains 538 frames, including
+its five-second result hold.

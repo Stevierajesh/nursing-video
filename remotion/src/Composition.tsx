@@ -83,7 +83,7 @@ const SEGS: Seg[] = [
 
   },
   {
-    src: "act6-reassessment.webm", at: 27.358, to: 57.2, len: 0, durationFrames: 538,
+    src: "reassessment/nurse.webm", at: 0.4, to: 16, len: 0, durationFrames: 538,
     keys: [
       { t: 0.00, cam: REASSESSMENT_HANDOFF },
       { t: 60 / 538, cam: focus(980, 200, 1.30) },
@@ -254,7 +254,7 @@ const ReassessmentResult: React.FC = () => (
       <Contribution label="Current vitals" value={3.0} delay={18} />
       <Contribution label="Vitals trend" value={0.0} delay={24} />
     </div>
-    <Reveal delay={28}><div style={{ fontFamily: C.sans, fontSize: 23, lineHeight: 1.4, color: C.muted }}>5.5 points, rounded to 6/10.<br />Her updated reason stays attached.</div></Reveal>
+    <Reveal delay={28}><div style={{ fontFamily: C.sans, fontSize: 23, lineHeight: 1.4, color: C.muted }}>5.5 points, rounded to 6/10.<br />Her updated observations are recorded.</div></Reveal>
   </div>
 );
 
@@ -269,23 +269,14 @@ const ReassessmentHandoffMatte: React.FC = () => {
 const ReassessmentFootage: React.FC = () => {
   const frame = useCurrentFrame();
   return <div style={{ position: "relative", width: "100%", height: "100%" }}>
-    {/* Trim only stationary waits. Keep every selection, pointer move and the
-        entire updated note, under one uninterrupted device/camera path. */}
+    {/* Current app rehearsal: faster typing, a full-note hold, then the actual
+        backend-generated verdict. Preserve the enclosing camera and timing. */}
     <Series>
-      <Series.Sequence name="Choose the worry level" durationInFrames={86} layout="none">
-        <OffthreadVideo src={staticFile("act6-reassessment.webm")} startFrom={821} playbackRate={103.26 / 86} muted style={{ width: "100%", height: "100%" }} />
+      <Series.Sequence name="Concern, breathing change and updated note" durationInFrames={388} layout="none">
+        <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={318 / 388} muted style={{ width: "100%", height: "100%" }} />
       </Series.Sequence>
-      <Series.Sequence name="Move directly to What's off" durationInFrames={63} layout="none">
-        <OffthreadVideo src={staticFile("act6-reassessment.webm")} startFrom={1019} playbackRate={75 / 63} muted style={{ width: "100%", height: "100%" }} />
-      </Series.Sequence>
-      <Series.Sequence name="Continue directly into Anything else" durationInFrames={56} layout="none">
-        <OffthreadVideo src={staticFile("act6-reassessment.webm")} startFrom={1169} playbackRate={67.5 / 56} muted style={{ width: "100%", height: "100%" }} />
-      </Series.Sequence>
-      <Series.Sequence name="Type the full note without the focus pause" durationInFrames={105} layout="none">
-        <OffthreadVideo src={staticFile("act6-reassessment.webm")} startFrom={1260} playbackRate={126 / 105} muted style={{ width: "100%", height: "100%" }} />
-      </Series.Sequence>
-      <Series.Sequence name="Submit and hold the recorded result" durationInFrames={228} layout="none">
-        <OffthreadVideo src={staticFile("act6-reassessment.webm")} startFrom={1443} playbackRate={273 / 228} muted style={{ width: "100%", height: "100%" }} />
+      <Series.Sequence name="Hold the current review result" durationInFrames={150} layout="none">
+        <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={330} muted style={{ width: "100%", height: "100%" }} />
       </Series.Sequence>
     </Series>
     <Sequence name="Blend the time-lapse into the reassessment recording" durationInFrames={20} layout="none">
@@ -305,6 +296,8 @@ export const SecondAssessmentPreview: React.FC = () => (
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Second assessment", head: "Pressure falling.\nRates rising." }} />
     </Sequence>
     <Sequence name="Act 6: Recorded 6 out of 10 result" from={388} durationInFrames={150}><ReassessmentResult /></Sequence>
+    <div style={{ position: "absolute", zIndex: 10, bottom: 25, left: 80, right: 80, textAlign: "right",
+      fontFamily: C.sans, fontSize: 22, color: C.muted }}>Prototype flow · browser-only rehearsal</div>
   </AbsoluteFill>
 );
 

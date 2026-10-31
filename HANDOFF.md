@@ -2,6 +2,15 @@
 
 ## Current status
 
+Latest reassessment update: replaced the old diagnostic wording with “Concerned
+about deterioration. BP falling, heart rate and breathing rising. Please assess.”
+Fresh browser rehearsal of current nurse UI uses Breathing off and faster typing
+(8 ms input delay; approximately 1.6 s in the edit), then a full-note hold. The
+same 538-frame Act 6, five-second 6/10 result hold and main 4856-frame timing are
+preserved. New source and fixtures: remotion/public/reassessment/. Existing
+acknowledgment survives the new concern; the current API response replaces the
+obsolete no-page confirmation. No live clinical writes.
+
 Latest pacing adjustment: the calm first-assessment view holds an extra three
 seconds before interaction starts, with subtext exactly “Everything seemed normal”.
 It lasts 140 frames / 4.67 s including the intro transition. Held baseline source
@@ -139,11 +148,21 @@ First note: “In my experience, I have seen that swelling of the feet while cra
 
 ## Act 6 — latest substantive edit
 
+The older source trims below describe the previous take. Current footage is a
+labeled browser rehearsal in `reassessment/nurse.webm`: first 388 composition
+frames use source 0.4–11 s at 318/388 playback, followed by five seconds from
+source 11 s. Existing camera, Watch handoff and stationary headline remain.
+Offline fixtures invoke the actual backend API/risk logic with in-memory
+storage: HR 129, RR 26, BP 75/52, SpO2 96, temp 36.9, NEWS 8, score 55 (6/10).
+These match the prior take's reassessment observations; no new values are
+claimed to be live measurements. Full note and result stills checked at
+remotion/out/reassessment-new-note-275.png and reassessment-new-note-420.png.
+
 User requested: replace “Still very worried” and its tagline with **“Pressure falling. Rates rising.”**, and make concern selection → What's off → Anything else entry one continuous flow.
 
 Implemented a single stationary heading under Second assessment, without a subtitle, from frames 0–388. Removed the old changing action captions and “On the record.” The full updated second note is distinct from the first:
 
-> Circulatory decline. BP falling, heart rate and breathing rising. Please review.
+> Concerned about deterioration. BP falling, heart rate and breathing rising. Please assess.
 
 Adjacent footage clips in `ReassessmentFootage` remove stationary waits while preserving pointer glides, selections, full note entry and submission. Source ranges approximately 27.3667–30.8087, 33.9667–36.4667, 38.9667–41.2167, 42.0–46.2, 48.1–57.2 seconds; durations 86, 63, 56, 105, 228 frames, approximately 1.2× playback. Act 6 totals 538 frames. Actual 6/10 result begins at frame 388 and keeps its 5-second hold.
 
