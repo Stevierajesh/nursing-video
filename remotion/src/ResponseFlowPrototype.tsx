@@ -1,6 +1,7 @@
 import React from "react";
-import { AbsoluteFill, Audio, Easing, OffthreadVideo, Sequence, Series, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, Easing, OffthreadVideo, Sequence, Series, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { C, Eyebrow, Head, Sub } from "./Type";
+import { PATIENT_SLIDE_FRAMES } from "./PatientIntro";
 
 const ENTRY_FRAMES = 350;
 const RESULT_FRAMES = 135;
@@ -22,7 +23,12 @@ const Device: React.FC<{ keys: CameraKey[]; children: React.ReactNode }> = ({ ke
   const y = interpolate(frame, times, keys.map(key => key.y), options);
   const zoom = interpolate(frame, times, keys.map(key => key.zoom), options);
   const ratio = 1000 / 1366;
-  return <AbsoluteFill style={{ overflow: "hidden" }}>
+  return <AbsoluteFill
+    style={{
+      overflow: "hidden",
+      translate: "2px 0px"
+    }}
+  >
     <div style={{ position: "absolute", left: 570 - x * ratio * zoom - 26 * zoom,
       top: 540 - y * ratio * zoom - 26 * zoom,
       width: 1052, height: 802, padding: 26, boxSizing: "border-box",
@@ -97,10 +103,16 @@ const AssessmentPending: React.FC = () => (
   </AbsoluteFill>
 );
 
-export const ResponseFlowPrototype: React.FC = () => (
-  <AbsoluteFill style={{ background: C.canvas }}>
+export const ResponseFlowPrototype: React.FC<{ withMusic?: boolean; slideIn?: boolean }> = ({ withMusic = true, slideIn = false }) => {
+  const frame = useCurrentFrame();
+  const { width } = useVideoConfig();
+  return <AbsoluteFill style={{ background: C.canvas,
+    translate: slideIn ? `${interpolate(frame, [0, PATIENT_SLIDE_FRAMES], [width, 0], {
+      extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.bezier(0.45, 0, 0.25, 1),
+    })}px 0` : undefined,
+  }}>
     {/* Audition against the music at the existing first-assessment position. */}
-    <Audio src={staticFile("b51-q2.wav")} startFrom={1235} />
+    {withMusic && <Audio src={staticFile("b51-q2.wav")} startFrom={1235} />}
     <Series>
       <Series.Sequence name="Record the concern" durationInFrames={ENTRY_FRAMES}><ConcernEntry /></Series.Sequence>
       <Series.Sequence name="Yellow review confirmation" durationInFrames={RESULT_FRAMES}><ReviewRequested /></Series.Sequence>
@@ -111,5 +123,5 @@ export const ResponseFlowPrototype: React.FC = () => (
       fontFamily: C.sans, fontSize: 22, color: C.muted }}>
       Prototype flow · browser-only rehearsal
     </div>
-  </AbsoluteFill>
-);
+  </AbsoluteFill>;
+};

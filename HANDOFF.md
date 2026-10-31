@@ -2,6 +2,17 @@
 
 ## Current status
 
+**Integrated into SalusDemo, 2026-10-31:** The new light charge-nurse response
+flow now replaces the old first assessment in the main film and Act4 preview.
+Main preview: http://localhost:3000/SalusDemo. First assessment remains at frame
+1235 and now lasts 785 frames. Later scenes ripple +178 frames / 5.93 s; full
+film is 4766 frames / 158.87 s. The main soundtrack stays in place with one audio
+track; standalone response preview retains its own audition audio. Logo remains
+at frame 956. Timmy's 36-frame slide and the user's device +2px adjustment are
+preserved. Time-lapse status/copy now carries acknowledged / assessment pending
+forward. Later reassessment/physician acts otherwise retain the existing edit.
+No new MP4 export; salus-demo.mp4 predates these source changes.
+
 **Response-flow prototype is ready for review** on branch `response-flow-prototype`:
 http://localhost:3000/ResponseFlow-Prototype (785 frames / 26.17 s). This is a
 separate composition; SalusDemo and the delivered MP4 retain the baseline edit.
@@ -69,14 +80,14 @@ The full film was rendered and delivered. On 2026-10-30, two opening copy change
 | Act 1 evidence | 480 | 251 |
 | Act 2 bridge, question, brand | 731 | 375 |
 | Meet Timmy | 1106 | 165, overlapping next section by 36 |
-| First assessment | 1235 | 607 |
-| Act 5 watch/time-lapse | 1842 | 360 |
-| Act 6 reassessment | 2202 | 538 |
-| Act 7 escalation | 2740 | 570 |
-| Act 8 physician review | 3310 | 783 |
-| Act 9 recovery/recap | 4093 | 360 |
-| Outro | 4453 | 135 |
-| End | 4588 | |
+| First assessment + charge response | 1235 | 785 |
+| Act 5 watch/time-lapse | 2020 | 360 |
+| Act 6 reassessment | 2380 | 538 |
+| Act 7 escalation | 2918 | 570 |
+| Act 8 physician review | 3488 | 783 |
+| Act 9 recovery/recap | 4271 | 360 |
+| Outro | 4631 | 135 |
+| End | 4766 | |
 
 Timing is derived from shared source constants; update those rather than duplicating absolute offsets when editing.
 
@@ -106,7 +117,7 @@ Brand reveal: emblem begins at main frame 956; INTRODUCING fades in; SALUS wordm
 
 ## First assessment and Act 5
 
-First assessment uses trimmed adjacent clips from `act4.webm`, one camera path and 607 frames. It zooms into the actual calm vitals, then worry controls and the actual note field. Persistent copy after the calm view: **“But she has seen this before.” / “She selects her concern and adds a reason.”** Removed duplicate sidebar quotation and redundant Very worried/Recording concern headings. Actual submitted score is 3/10.
+First assessment now uses the shared response-flow composition, 785 frames. Current frontend recordings show stable vitals, Very worried with no optional reason chip, the full note, yellow review confirmation (combined score 3/10), charge popup/acknowledgment, and the response queue with assessment pending. This is a labeled browser rehearsal with API-generated offline fixtures, not a live clinical submission. Source assets: `response-prototype/nurse.webm` and `charge.webm`. Sidebar copy is hidden while typing. “Her concern starts a response” replaces the old no-page claim.
 
 First note: “In my experience, I have seen that swelling of the feet while cramping is a symptom of circulatory decline.”
 
@@ -116,6 +127,7 @@ First note: “In my experience, I have seen that swelling of the feet while cra
 - Endpoint: HR 106, RR 22, BP 101/66, SpO2 96, temperature 37.0; score 5/10.
 - Connecting samples are authored illustration, labeled Demo time-lapse, Simulated observations and Illustrative replay between recorded observations. No patient data was written.
 - Change heading: **“Heart rate up. Breathing faster. Pressure falling.”** No “Ten minutes of change, in seconds” subtitle.
+- Priority panel/copy now carry “Concern acknowledged · assessment pending” through the illustrative replay, independently of the combined score.
 
 ## Act 6 — latest substantive edit
 

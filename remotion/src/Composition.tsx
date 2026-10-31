@@ -11,6 +11,7 @@ import { PatientIntro, PATIENT_INTRO_FRAMES, PATIENT_SLIDE_FRAMES } from "./Pati
 import { Scene, Eyebrow, Head, Sub } from "./Type";
 import { Act9Recovery, ACT9_FRAMES } from "./Act9Recovery";
 import { WatchTimeLapseScreen, WatchClock } from "./WatchTimeLapse";
+import { ResponseFlowPrototype, RESPONSE_PROTOTYPE_FRAMES } from "./ResponseFlowPrototype";
 
 /* ── timing ────────────────────────────────────────────────────────────── */
 export const FPS = 30;
@@ -64,7 +65,7 @@ const SEGS: Seg[] = [
   // Trim stationary holds in the first recording. The camera and copy run on
   // one uninterrupted clock; all pointer moves and the complete note survive.
   {
-    src: "act4.webm", at: 18.4, to: 57.8, len: 0, durationFrames: 607,
+    src: "act4.webm", at: 18.4, to: 57.8, len: 0, durationFrames: RESPONSE_PROTOTYPE_FRAMES,
     keys: [
       { t: 0.00, cam: focus(330, 610, 1.65) },
       { t: 0.05, cam: focus(330, 610, 2.20) },
@@ -221,41 +222,9 @@ const SegView: React.FC<{ s: Seg & { dur: number }; slideIn?: boolean; children?
   );
 };
 
-// Cuts only remove stationary pauses, including the server's Sending wait.
-// Series keeps the actions adjacent without resetting the enclosing camera.
-const FirstAssessmentFootage: React.FC = () => (
-  <Series>
-    <Series.Sequence name="Calm chart and concern selection" durationInFrames={143} layout="none">
-      <OffthreadVideo src={staticFile("act4.webm")} startFrom={552} playbackRate={186 / 143} muted style={{ width: "100%", height: "100%" }} />
-    </Series.Sequence>
-    <Series.Sequence name="Select reason, trim idle hold" durationInFrames={74} layout="none">
-      <OffthreadVideo src={staticFile("act4.webm")} startFrom={852} playbackRate={96 / 74} muted style={{ width: "100%", height: "100%" }} />
-    </Series.Sequence>
-    <Series.Sequence name="Enter the full note" durationInFrames={192} layout="none">
-      <OffthreadVideo src={staticFile("act4.webm")} startFrom={1026} playbackRate={249 / 192} muted style={{ width: "100%", height: "100%" }} />
-    </Series.Sequence>
-    <Series.Sequence name="Submit without the idle pause" durationInFrames={46} layout="none">
-      <OffthreadVideo src={staticFile("act4.webm")} startFrom={1335} playbackRate={60 / 46} muted style={{ width: "100%", height: "100%" }} />
-    </Series.Sequence>
-    <Series.Sequence name="Recorded result, shorten server wait" durationInFrames={152} layout="none">
-      <OffthreadVideo src={staticFile("act4.webm")} startFrom={1536} playbackRate={198 / 152} muted style={{ width: "100%", height: "100%" }} />
-    </Series.Sequence>
-  </Series>
-);
-
+// Shared with the standalone response-flow review; the main film owns its music.
 export const FirstAssessmentPreview: React.FC<{ slideIn?: boolean }> = ({ slideIn = false }) => (
-  <AbsoluteFill style={{ background: C.canvas }}>
-    <SegView s={TIMED[0]} slideIn={slideIn}><FirstAssessmentFootage /></SegView>
-    <Sequence name="The calm vitals, before she selects worry" durationInFrames={90}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, head: "The chart is calm.", sub: "HR 88 · RR 18 · BP 118/74. NEWS 0." }} />
-    </Sequence>
-    <Sequence name="One explanation throughout concern, reason, note and submission" from={90} durationInFrames={429}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, head: "But she has\nseen this before.", sub: "She selects her concern and adds a reason." }} />
-    </Sequence>
-    <Sequence name="First recorded result: 3 out of 10" from={519} durationInFrames={FIRST_ASSESSMENT_FRAMES - 519}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Assessment recorded", head: "3 out of 10.", sub: "Her worry counts. No page is sent yet." }} />
-    </Sequence>
-  </AbsoluteFill>
+  <ResponseFlowPrototype withMusic={false} slideIn={slideIn} />
 );
 
 const Contribution: React.FC<{ label: string; value: number; delay: number }> = ({ label, value, delay }) => {
@@ -355,15 +324,15 @@ export const Act5Watch: React.FC = () => (
     </Sequence>
     <AbsoluteFill style={{ left: 1060, background: "linear-gradient(90deg, transparent 0px, #f3f6f8 65px)" }} />
     <Sequence name="The calm chart" durationInFrames={60}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "2 · Watch · Baseline", head: "Salus keeps\nwatching.",
-        sub: "Timmy's observations keep updating." }} />
+      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Assessment pending", head: "Salus keeps\nwatching.",
+        sub: "The concern is acknowledged. Patient assessment is still pending." }} />
     </Sequence>
     <Sequence name="Ten minutes of change, compressed" from={60} durationInFrames={210}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, head: "Heart rate up.\nBreathing faster.\nPressure falling." }} />
     </Sequence>
     <Sequence name="The risk update is visible in Salus" from={270} durationInFrames={90}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "In-app risk update", head: "5 out of 10.",
-        sub: "Watch. The change is visible in Salus, ready for the team to review." }} />
+        sub: "His observations have changed. The review remains open, with assessment pending." }} />
     </Sequence>
     <WatchClock />
   </AbsoluteFill>
@@ -528,7 +497,7 @@ export const MyComposition: React.FC = () => (
     <Sequence name="Meet Timmy Buttons" from={OPENING_FRAMES} durationInFrames={PATIENT_INTRO_FRAMES}><PatientIntro /></Sequence>
     <Sequence name="Act 5: Salus watches" from={ACT5_START} durationInFrames={ACT5_FRAMES}><Act5Watch /></Sequence>
     {TAKES_T.map((s, i) => (
-      <Sequence key={`t${i}`} name={i === 0 ? "First assessment" : i === 1 ? "Second assessment: updated observations" : "Act 7: Escalation and Room 609"} from={s.start} durationInFrames={s.dur}>
+      <Sequence key={`t${i}`} name={i === 0 ? "First assessment and charge-nurse response" : i === 1 ? "Second assessment: updated observations" : "Act 7: Escalation and Room 609"} from={s.start} durationInFrames={s.dur}>
         {i === 0 ? <FirstAssessmentPreview slideIn /> : i === 1 ? <SecondAssessmentPreview /> : <Act7Escalation />}
       </Sequence>
     ))}

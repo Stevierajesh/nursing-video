@@ -61,7 +61,7 @@ export const WatchTimeLapseScreen: React.FC = () => {
   const news = (Math.round(readingAt("heart_rate", minutes)) > 90 ? 1 : 0)
     + (Math.round(readingAt("resp_rate", minutes)) >= 21 ? 2 : 0)
     + (Math.round(readingAt("systolic_bp", minutes)) <= 110 ? 1 : 0);
-  const bandColor = score >= 4 ? C.watch : C.low;
+  const bandColor = C.watch;
   return <div style={{ position: "relative", width: 1366, height: 1024, scale: 1000 / 1366, transformOrigin: "top left", fontFamily: C.sans }}>
     <Freeze frame={0}>
       <OffthreadVideo src={staticFile("act4.webm")} startFrom={552} muted style={{ width: 1366, height: 1024 }} />
@@ -74,9 +74,9 @@ export const WatchTimeLapseScreen: React.FC = () => {
       <div style={{ fontSize: 10, marginTop: 6 }}>Demo T+{elapsed(minutes)} · RR {Math.round(readingAt("resp_rate", minutes))} · SpO₂ 96% · HR {Math.round(readingAt("heart_rate", minutes))}</div>
     </div>
     <div style={{ position: "absolute", left: 59, top: 242, width: 612, height: 90, boxSizing: "border-box", padding: "13px 16px",
-      borderRadius: 18, border: `1px solid ${bandColor}50`, background: score >= 4 ? "#f3ead9" : "#e0efe7", color: bandColor,
+      borderRadius: 18, border: `1px solid ${bandColor}50`, background: "#f3ead9", color: bandColor, boxShadow: `0 0 0 3px ${C.canvas}`,
       display: "flex", flexDirection: "column", gap: 6 }}>
-      <div style={{ fontSize: 16, fontWeight: 700 }}>Combined score {score >= 4 ? "watch" : "low"}</div>
+      <div style={{ fontSize: 16, fontWeight: 700 }}>Concern acknowledged · assessment pending</div>
       <div style={{ fontSize: 12, color: C.muted }}>NEWS {news} · {news === 0 ? "Zero" : "Low"}</div>
       <div style={{ fontSize: 12, color: C.muted }}>Combined score {score}/10</div>
     </div>
