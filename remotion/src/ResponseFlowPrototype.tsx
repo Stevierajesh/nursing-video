@@ -1,9 +1,10 @@
 import React from "react";
-import { AbsoluteFill, Audio, Easing, OffthreadVideo, Sequence, Series, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Audio, Easing, Freeze, OffthreadVideo, Sequence, Series, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { C, Eyebrow, Head, Sub } from "./Type";
 import { PATIENT_SLIDE_FRAMES } from "./PatientIntro";
 
-const ENTRY_FRAMES = 350;
+const BASELINE_HOLD_FRAMES = 90;
+const ENTRY_FRAMES = 350 + BASELINE_HOLD_FRAMES;
 const RESULT_FRAMES = 135;
 const NOTIFICATION_FRAMES = 180;
 const QUEUE_FRAMES = 120;
@@ -56,20 +57,29 @@ const ConcernEntry: React.FC = () => (
   <AbsoluteFill>
     <Device keys={[
       { frame: 0, x: 530, y: 520, zoom: 1.65 },
-      { frame: 40, x: 530, y: 520, zoom: 1.65 },
-      { frame: 65, x: 1080, y: 180, zoom: 1.8 },
-      { frame: 100, x: 1080, y: 230, zoom: 1.8 },
-      { frame: 150, x: 1080, y: 440, zoom: 1.9 },
-      { frame: 302, x: 1080, y: 440, zoom: 1.9 },
-      { frame: 330, x: 1080, y: 540, zoom: 1.7 },
+      { frame: 40 + BASELINE_HOLD_FRAMES, x: 530, y: 520, zoom: 1.65 },
+      { frame: 65 + BASELINE_HOLD_FRAMES, x: 1080, y: 180, zoom: 1.8 },
+      { frame: 100 + BASELINE_HOLD_FRAMES, x: 1080, y: 230, zoom: 1.8 },
+      { frame: 150 + BASELINE_HOLD_FRAMES, x: 1080, y: 440, zoom: 1.9 },
+      { frame: 302 + BASELINE_HOLD_FRAMES, x: 1080, y: 440, zoom: 1.9 },
+      { frame: 330 + BASELINE_HOLD_FRAMES, x: 1080, y: 540, zoom: 1.7 },
       { frame: ENTRY_FRAMES, ...RESULT_POSE },
     ]}>
-      <OffthreadVideo src={staticFile("response-prototype/nurse.webm")} startFrom={12} muted style={{ width: "100%", height: "100%" }} />
+      <Series>
+        <Series.Sequence name="Hold the calm baseline" durationInFrames={BASELINE_HOLD_FRAMES} layout="none">
+          <Freeze frame={0}>
+            <OffthreadVideo src={staticFile("response-prototype/nurse.webm")} startFrom={12} muted style={{ width: "100%", height: "100%" }} />
+          </Freeze>
+        </Series.Sequence>
+        <Series.Sequence name="Continuous concern entry" durationInFrames={ENTRY_FRAMES - BASELINE_HOLD_FRAMES} layout="none">
+          <OffthreadVideo src={staticFile("response-prototype/nurse.webm")} startFrom={12} muted style={{ width: "100%", height: "100%" }} />
+        </Series.Sequence>
+      </Series>
     </Device>
-    <Sequence name="Stable observations" durationInFrames={50}>
-      <Caption label="First assessment" title={<>The observations<br />are calm.</>}>HR 88 · RR 18 · BP 118/74.<br />NEWS 0.</Caption>
+    <Sequence name="Stable observations" durationInFrames={50 + BASELINE_HOLD_FRAMES}>
+      <Caption label="First assessment" title={<>The observations<br />are calm.</>}>Everything seemed normal</Caption>
     </Sequence>
-    <Sequence name="The nurse notices" from={50} durationInFrames={100}>
+    <Sequence name="The nurse notices" from={50 + BASELINE_HOLD_FRAMES} durationInFrames={100}>
       <Caption label="Nurse concern" title={<>But she has<br />seen this before.</>} />
     </Sequence>
   </AbsoluteFill>

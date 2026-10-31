@@ -345,3 +345,7 @@ User requested main timeline integration. FirstAssessmentPreview now reuses Resp
 Updated time-lapse's illustrative priority panel and copy to carry acknowledged / assessment pending status forward, keeping existing values, score progression, charts and camera. First-assessment and Timmy standalone previews share the new implementation. Later acts retain their prior footage/edit. Lint/TypeScript pass and Remotion composition metadata confirms main 4766 / response 785 / Act4 785. Main stills inspected at 1253 (Timmy slide), 1785 (charge popup), 2035 (watch status). No patient writes or full MP4 export.
 
 Main Studio playback from frame 1180 through 2231 covers Timmy transition, complete response flow and following watch scene, with zero page errors. Saved playback proof at remotion/out/main-response-playback.png.
+
+## Hold the calm observations longer
+
+User requested a longer first-assessment calm frame and exact subtext “Everything seemed normal”. Added a 90-frame / three-second frozen baseline before the original continuous entry footage, rebasing later camera/caption keys by the same amount. Stable-observations caption now lasts 140 frames / 4.67 s, allowing its gentle subtitle reveal to finish and hold. Original interaction/note/submit remain intact; no optional reason selected. First assessment + charge flow now 875 frames / 29.17 s; main 4856 / 161.87 s. Later scenes ripple three seconds; music file/placement and logo frame 956 unchanged. Lint/TypeScript pass; main frame 1345 visually checked at remotion/out/calm-longer-hold.png. No MP4 export.
