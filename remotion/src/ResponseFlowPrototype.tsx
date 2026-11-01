@@ -143,7 +143,7 @@ const ASSESSED_POSE: Pose = { x: 1060, y: 185, zoom: 1.9 };
 const PatientAssessment: React.FC = () => (
   <AbsoluteFill>
     <Device keys={[{ frame: 0, x: 1080, y: 265, zoom: 1.9 }, { frame: 190, x: 1080, y: 265, zoom: 1.9 }, { frame: ASSESSMENT_FRAMES, ...ASSESSED_POSE }]}>
-      <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={36} muted style={{ width: "100%", height: "100%" }} />
+      <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={60} playbackRate={0.9} muted style={{ width: "100%", height: "100%" }} />
     </Device>
   </AbsoluteFill>
 );

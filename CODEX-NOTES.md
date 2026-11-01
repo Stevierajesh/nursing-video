@@ -461,3 +461,7 @@ User still found the motion jarring. Slowed continuous navigation footage to0.8x
 ## Crossfade the nurse-to-charge handoff
 
 User approved a0.5s crossfade between map and charge-account notification with matching tablet framing. Shared MAP_HANDOFF_POSE keeps the outgoing map and incoming charge tablet identical during15-frame blend. Map already settles for15frames before the boundary; outgoing video freezes at its exact last frame during the dissolve. Incoming camera holds through the fade then gently reframes over65frames to a smaller1.9x popup view instead of the previous immediate2.5x cut. Charge nurse label is fully visible immediately; headline reveal waits until the fade finishes. Scene durations, total4706frames and music unchanged. Lint/TypeScript pass; main handoff blend/alert stills checked and Studio played across the boundary without page errors.
+
+## Skip loading at assessment entry
+
+User flagged loading around1:11.04. Inspected the assessment source: loaded view appears around1.75s. Moved assessment trim from36→60 (2s), with0.9x playback to retain the same8-second scene and original source endpoint9.2s. Assessment action and recorded-response handoff remain intact, captions/timing/music unchanged. Lint/TypeScript pass; first main assessment frame2125 visually verified as fully loaded in remotion/out/assessment-loaded-start.png.
