@@ -17,6 +17,8 @@ type Pose = { x: number; y: number; zoom: number };
 type CameraKey = Pose & { frame: number };
 const RESULT_POSE: Pose = { x: 640, y: 280, zoom: 1.5 };
 const QUEUE_POSE: Pose = { x: 600, y: 245, zoom: 1.25 };
+const MAP_HANDOFF_POSE: Pose = { x: 980, y: 680, zoom: 1.4 };
+const HANDOFF_FRAMES = 15;
 
 // Match the main film's rigid iPad geometry; all entry actions share one camera.
 const Device: React.FC<{ keys: CameraKey[]; children: React.ReactNode }> = ({ keys, children }) => {
@@ -46,12 +48,12 @@ const Device: React.FC<{ keys: CameraKey[]; children: React.ReactNode }> = ({ ke
   </AbsoluteFill>;
 };
 
-const Caption: React.FC<{ label: string; title: React.ReactNode; children?: React.ReactNode }> = ({ label, title, children }) => (
+const Caption: React.FC<{ label: string; title: React.ReactNode; children?: React.ReactNode; stillLabel?: boolean; titleDelay?: number }> = ({ label, title, children, stillLabel = false, titleDelay = 5 }) => (
   <div style={{ position: "absolute", inset: "0 0 0 auto", width: 660, boxSizing: "border-box",
     display: "flex", flexDirection: "column", justifyContent: "center", gap: 28, padding: "0 78px 0 60px",
     background: "linear-gradient(90deg,rgba(243,246,248,0),#f3f6f8 45px)" }}>
-    <Eyebrow revealFrames={24}>{label}</Eyebrow>
-    <Head size={62} revealFrames={24}>{title}</Head>
+    {stillLabel ? <Freeze frame={60}><Eyebrow revealFrames={24}>{label}</Eyebrow></Freeze> : <Eyebrow revealFrames={24}>{label}</Eyebrow>}
+    <Head d={titleDelay} size={62} revealFrames={24}>{title}</Head>
     {children && <Sub d={30} revealFrames={24}>{children}</Sub>}
   </div>
 );
@@ -95,8 +97,8 @@ const ReviewToMap: React.FC = () => (
       { frame: 12, ...RESULT_POSE },
       { frame: 65, x: 750, y: 500, zoom: 1.05 },
       { frame: 110, x: 750, y: 500, zoom: 1.05 },
-      { frame: 195, x: 980, y: 680, zoom: 1.4 },
-      { frame: RESULT_FRAMES + MAP_FRAMES, x: 980, y: 680, zoom: 1.4 },
+      { frame: 195, ...MAP_HANDOFF_POSE },
+      { frame: RESULT_FRAMES + MAP_FRAMES, ...MAP_HANDOFF_POSE },
     ]}>
       <OffthreadVideo src={staticFile("map-navigation/nurse.webm")} startFrom={36} playbackRate={0.8} muted style={{ width: "100%", height: "100%" }} />
     </Device>
@@ -109,14 +111,33 @@ const ReviewToMap: React.FC = () => (
   </AbsoluteFill>
 );
 
-const ChargeNotification: React.FC = () => (
-  <AbsoluteFill>
-    <Device keys={[{ frame: 0, x: 1158, y: 220, zoom: 2.5 }, { frame: 135, x: 1158, y: 220, zoom: 2.5 }, { frame: NOTIFICATION_FRAMES, ...QUEUE_POSE }]}>
+const ChargeNotification: React.FC = () => {
+  const frame = useCurrentFrame();
+  const incomingOpacity = interpolate(frame, [0, HANDOFF_FRAMES], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.quad),
+  });
+  return <AbsoluteFill>
+    <Sequence name="Hold the outgoing map during the handoff" durationInFrames={HANDOFF_FRAMES}>
+      <Device keys={[{ frame: 0, ...MAP_HANDOFF_POSE }, { frame: HANDOFF_FRAMES, ...MAP_HANDOFF_POSE }]}>
+        <Freeze frame={RESULT_FRAMES + MAP_FRAMES - 1}>
+          <OffthreadVideo src={staticFile("map-navigation/nurse.webm")} startFrom={36} playbackRate={0.8} muted style={{ width: "100%", height: "100%" }} />
+        </Freeze>
+      </Device>
+    </Sequence>
+    <AbsoluteFill style={{ opacity: incomingOpacity }}>
+    <Device keys={[
+      { frame: 0, ...MAP_HANDOFF_POSE },
+      { frame: HANDOFF_FRAMES, ...MAP_HANDOFF_POSE },
+      { frame: 80, x: 1158, y: 260, zoom: 1.9 },
+      { frame: 135, x: 1158, y: 260, zoom: 1.9 },
+      { frame: NOTIFICATION_FRAMES, ...QUEUE_POSE },
+    ]}>
       <OffthreadVideo src={staticFile("response-prototype/charge.webm")} startFrom={507} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Charge nurse" title={<>The charge nurse<br />is alerted.</>} />
-  </AbsoluteFill>
-);
+    </AbsoluteFill>
+    <Caption label="Charge nurse" stillLabel titleDelay={HANDOFF_FRAMES} title={<>The charge nurse<br />is alerted.</>} />
+  </AbsoluteFill>;
+};
 
 const ASSESSED_POSE: Pose = { x: 1060, y: 185, zoom: 1.9 };
 const PatientAssessment: React.FC = () => (

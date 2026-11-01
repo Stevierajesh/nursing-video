@@ -457,3 +457,7 @@ Replaced separate verdict/map clips with one165-frame ReviewToMap sequence using
 ## Slow and smooth the map navigation
 
 User still found the motion jarring. Slowed continuous navigation footage to0.8x, extended the segment165→210frames, and lengthened the camera pullback26→53frames and push-in33→85frames. Reduced final zoom1.55→1.4 with a stationary finish. Caption boundary now90frames with120-frame map caption. Reallocated45frames from later time-lapse (345frames), keeping reassessment2740, total4706 and music unchanged. Updated time-lapse interpolation and fade. Lint/TypeScript pass; main Studio played through the revised transition into charge notification with zero page errors.
+
+## Crossfade the nurse-to-charge handoff
+
+User approved a0.5s crossfade between map and charge-account notification with matching tablet framing. Shared MAP_HANDOFF_POSE keeps the outgoing map and incoming charge tablet identical during15-frame blend. Map already settles for15frames before the boundary; outgoing video freezes at its exact last frame during the dissolve. Incoming camera holds through the fade then gently reframes over65frames to a smaller1.9x popup view instead of the previous immediate2.5x cut. Charge nurse label is fully visible immediately; headline reveal waits until the fade finishes. Scene durations, total4706frames and music unchanged. Lint/TypeScript pass; main handoff blend/alert stills checked and Studio played across the boundary without page errors.
