@@ -421,3 +421,7 @@ Confirmed the original wording in baseline commit5f3228d, then restored the eyeb
 ## Shorten recorded-assessment hold
 
 Reduced the recorded-response shot from90 to30frames (3s to1s). Reallocated60frames to Act5 monitoring (now420), extending the continuous caption and observation animation while preserving the later reassessment start, total film duration and music alignment. Adjusted watch clock fade to the new end. Static assessment caption still spans both assessment shots. Lint/TypeScript pass.
+
+## Name Sally in the escalation caption
+
+Changed the review-requested headline to “Sally's concern starts an escalation.” at the user's request. Shared main/demo caption; supporting text, footage, timing and music unchanged. Lint/TypeScript pass.

@@ -93,7 +93,7 @@ const ReviewRequested: React.FC = () => (
       {/* Skip the waiting/toast overlay; retain the real UI's complete verdict. */}
       <OffthreadVideo src={staticFile("response-prototype/nurse.webm")} startFrom={645} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Review requested" title={<>Her concern<br />starts a response.</>}>Stable vital signs do not block a charge-nurse review.</Caption>
+    <Caption label="Review requested" title={<>Sally's concern<br />starts an escalation.</>}>Stable vital signs do not block a charge-nurse review.</Caption>
   </AbsoluteFill>
 );
 
