@@ -112,7 +112,7 @@ const ChargeNotification: React.FC = () => (
     <Device keys={[{ frame: 0, x: 1158, y: 220, zoom: 2.5 }, { frame: 135, x: 1158, y: 220, zoom: 2.5 }, { frame: NOTIFICATION_FRAMES, ...QUEUE_POSE }]}>
       <OffthreadVideo src={staticFile("response-prototype/charge.webm")} startFrom={507} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Charge nurse" title={<>The concern<br />reaches the team.</>}>The nurse&apos;s reason travels with the review request.</Caption>
+    <Caption label="Charge nurse" title={<>The charge nurse<br />is alerted.</>} />
   </AbsoluteFill>
 );
 
