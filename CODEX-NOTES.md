@@ -401,3 +401,7 @@ User chose the first proposed replacement: “Sally's concern led to action.” 
 ## Remove redundant recorded-response caption
 
 User requested no right-side text on the following recorded-response hold. Removed its Caption (eyebrow, headline and subtitle); footage/duration and persistent rehearsal footer unchanged. Applies in main and response preview. Lint/TypeScript pass. No MP4 export.
+
+## Keep Sally/Timmy caption across the follow-up frame
+
+User clarified the previous request: preserve “Sally's concern led to action.” / “A charge nurse assessed Timmy.” on the recorded-response frame too, instead of switching to the redundant Assessment recorded caption or going blank. Both assessment shots now use the chosen caption. Timing/source footage unchanged. Lint/TypeScript pass.

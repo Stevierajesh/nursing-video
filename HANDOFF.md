@@ -2,6 +2,11 @@
 
 ## Current status
 
+Correction to the last caption removal: user meant to keep “Sally's concern led
+to action.” / “A charge nurse assessed Timmy.” on the follow-up recorded-response
+frame as well. Both assessment shots now use that caption; obsolete “Assessment
+recorded” caption remains removed. Timing unchanged.
+
 Recorded-response hold now has no right-side caption: removed “Response recorded”,
 “Assessment recorded.” and “Monitoring continues.” at the user's request. Footage,
 hold duration and persistent rehearsal label remain; main/preview share the change.
