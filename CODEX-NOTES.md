@@ -439,3 +439,7 @@ Current app only pulsed red for high priority, while nurse_concern with normal o
 ## Distinguish map visibility from the notification
 
 User approved replacing the repeated notification message with “The charge nurse is alerted.” and removing its supporting sentence. Map caption remains “Her concern becomes visible to the team.” Shared main/prototype, same footage, durations and music. Lint/TypeScript pass.
+
+## Stronger amber map pulse
+
+User requested more visible yellow flashing. Increased the real app pending-concern pulse from4–20% to8–38% amber opacity, brightened and thickened the border3→4px, and added a soft5px halo at peak. Kept the slow2.4s cycle and reduced-motion handling. Re-recorded the same offline map view, with capture assertion updated to4px. Zero errors/unexpected API calls; main frame1835 visually checked at remotion/out/stronger-map-pulse.png. Clip placement, duration, captions and soundtrack unchanged. App CSS committed separately.

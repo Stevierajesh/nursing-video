@@ -98,7 +98,7 @@ try {
   const state=await room.evaluate(el=>({pulse:el.parentElement.classList.contains('room-concern-pending'),red:el.parentElement.classList.contains('room-risk-high')}));
   const pulseStyle=await room.evaluate(el=>{const s=getComputedStyle(el.parentElement,'::after');return {animation:s.animationName,border:s.borderTopWidth,color:s.borderTopColor};});
   manifest.pulseStyle=pulseStyle;
-  if(pulseStyle.animation!=='room-concern-pulse'||pulseStyle.border!=='3px')throw Error('Missing amber pulse styles');
+  if(pulseStyle.animation!=='room-concern-pulse'||pulseStyle.border!=='4px')throw Error('Missing amber pulse styles');
   if(!state.pulse||state.red)throw Error('Expected amber pending-concern room');
   map.mark('ready');manifest.room=box;manifest.alertState=state;
   await map.page.screenshot({path:out+'map.png'});

@@ -2,13 +2,13 @@
   "browserOnly": true,
   "noLiveWrites": true,
   "nurse": {
-    "ready": 1.738
+    "ready": 1.824
   },
   "charge": {},
   "pulseStyle": {
     "animation": "room-concern-pulse",
-    "border": "3px",
-    "color": "rgb(161, 98, 7)"
+    "border": "4px",
+    "color": "rgb(217, 158, 46)"
   },
   "room": {
     "x": 904.229248046875,
