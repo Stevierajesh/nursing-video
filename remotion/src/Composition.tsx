@@ -8,7 +8,7 @@ import {
   COLD_OPEN_FRAMES, GAP_FRAMES, LOGO_FRAMES, OPENING_FRAMES, OUTRO_FRAMES,
 } from "./TypeActs";
 import { PatientIntro, PATIENT_INTRO_FRAMES, PATIENT_SLIDE_FRAMES } from "./PatientIntro";
-import { Scene, Eyebrow, Head, Sub } from "./Type";
+import { Eyebrow, Head } from "./Type";
 import { Act9Recovery, ACT9_FRAMES } from "./Act9Recovery";
 import { WatchTimeLapseScreen, WatchClock } from "./WatchTimeLapse";
 import { ResponseFlowPrototype, RESPONSE_PROTOTYPE_FRAMES } from "./ResponseFlowPrototype";
@@ -23,7 +23,7 @@ const bars = (n: number) => Math.round(n * BAR);
 export const ACT5_FRAMES = 255;
 const REASSESSMENT_ENTRY_FRAMES = 388;
 const REASSESSMENT_FRAMES = REASSESSMENT_ENTRY_FRAMES + 150;
-export const ACT7_FRAMES = 150;
+export const ACT7_FRAMES = 210;
 export const ACT8_FRAMES = 783;
 
 const C = {
@@ -100,9 +100,9 @@ const SEGS: Seg[] = [
     ],
     cards: [], // Act 6 has independently timed overlays below.
   },
-  // Act 7 owns the review bridge below; this entry supplies shared timing.
+  // Act 7 owns the fresh-review footage below; this entry supplies shared timing.
   {
-    src: "act7-map.webm", at: 0, to: 0, len: 0, durationFrames: ACT7_FRAMES,
+    src: "team-review/nurse.webm", at: 1.2, to: 8.2, len: 0, durationFrames: ACT7_FRAMES,
     keys: [], cards: [],
   },
 ];
@@ -113,8 +113,7 @@ const TIMED = SEGS.map((s) => { const start = cur; const dur = s.durationFrames 
 const FOOTAGE_START = OPENING_FRAMES + PATIENT_INTRO_FRAMES - PATIENT_SLIDE_FRAMES;
 const ACT5_START = FOOTAGE_START + TIMED[0].dur;
 const TAKES_T = TIMED.map((x, i) => ({ ...x, start: x.start + FOOTAGE_START + (i > 0 ? ACT5_FRAMES : 0) }));
-const ACT8_START = FOOTAGE_START + cur + ACT5_FRAMES;
-const ACT9_START = ACT8_START + ACT8_FRAMES;
+const ACT9_START = FOOTAGE_START + cur + ACT5_FRAMES;
 export const TOTAL = ACT9_START + ACT9_FRAMES + OUTRO_FRAMES;
 export const FIRST_ASSESSMENT_FRAMES = TIMED[0].dur;
 export const SECOND_ASSESSMENT_FRAMES = TIMED[1].dur;
@@ -327,11 +326,21 @@ export const Act5Watch: React.FC = () => (
 );
 
 export const Act7Escalation: React.FC = () => (
-  <Scene dur={ACT7_FRAMES} center>
-    <Eyebrow>3 · Review</Eyebrow>
-    <Head size={88}>New findings.<br />A fresh review.</Head>
-    <Sub>Next: a physician reviews<br />the demo medication request.</Sub>
-  </Scene>
+  <AbsoluteFill style={{ background: C.canvas }}>
+    <SegView s={{
+      src: "team-review/nurse.webm", at: 1.2, to: 8.2, len: 0, dur: ACT7_FRAMES,
+      keys: [
+        { t: 0, cam: focus(820, 310, 1.45) },
+        { t: 75 / ACT7_FRAMES, cam: focus(820, 310, 1.45) },
+        { t: 145 / ACT7_FRAMES, cam: focus(760, 440, 1.35) },
+        { t: 1, cam: focus(760, 440, 1.35) },
+      ], cards: [],
+    }} />
+    <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Fresh review requested", head: "The team gets\nthe updated picture.",
+      sub: "Sally: “BP falling, heart rate and breathing rising. Please assess.”" }} />
+    <div style={{ position: "absolute", zIndex: 10, bottom: 25, left: 80, right: 80, textAlign: "right",
+      fontFamily: C.sans, fontSize: 22, color: C.muted }}>Prototype flow · browser-only rehearsal</div>
+  </AbsoluteFill>
 );
 
 const REVIEW_SECTIONS = [
@@ -447,11 +456,10 @@ export const MyComposition: React.FC = () => (
     <Sequence name="Meet Timmy Buttons" from={OPENING_FRAMES} durationInFrames={PATIENT_INTRO_FRAMES}><PatientIntro /></Sequence>
     <Sequence name="Act 5: Salus watches" from={ACT5_START} durationInFrames={ACT5_FRAMES}><Act5Watch /></Sequence>
     {TAKES_T.map((s, i) => (
-      <Sequence key={`t${i}`} name={i === 0 ? "First assessment and charge-nurse response" : i === 1 ? "Second assessment: updated observations" : "Act 7: Fresh review"} from={s.start} durationInFrames={s.dur}>
+      <Sequence key={`t${i}`} name={i === 0 ? "First assessment and charge-nurse response" : i === 1 ? "Second assessment: updated observations" : "Act 7: Updated concern reaches the team"} from={s.start} durationInFrames={s.dur}>
         {i === 0 ? <FirstAssessmentPreview slideIn /> : i === 1 ? <SecondAssessmentPreview /> : <Act7Escalation />}
       </Sequence>
     ))}
-    <Sequence name="Act 8: Physician review and demo decision" from={ACT8_START} durationInFrames={ACT8_FRAMES}><Act8Review /></Sequence>
     <Sequence name="Act 9: Simulated recovery and care journey" from={ACT9_START} durationInFrames={ACT9_FRAMES}><Act9Recovery /></Sequence>
     <Sequence name="Act 11: Outro" from={ACT9_START + ACT9_FRAMES} durationInFrames={OUTRO_FRAMES}><Outro /></Sequence>
   </AbsoluteFill>

@@ -1,0 +1,14 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "nurse": {},
+  "charge": {
+    "queue": 0.474,
+    "open": 3.134,
+    "details": 4.19
+  },
+  "reviewStatus": "open",
+  "note": "Concerned about deterioration. BP falling, heart rate and breathing rising. Please assess.",
+  "errors": [],
+  "unexpected": []
+}

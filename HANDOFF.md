@@ -3,9 +3,21 @@
 ## Current status
 
 Updated 2026-11-01: branch `assessment-response-story`; preview
-http://localhost:3000/SalusDemo. Main film is4616frames/153.87s; logo956,
+http://localhost:3000/SalusDemo. Main film is3893frames/129.77s; logo956,
 first assessment1295, charge response1945, monitoring2395, reassessment2650.
 Music placement is unchanged. No pushes or new full MP4 exports.
+
+Latest ending: the full physician medication demonstration is removed from the
+MAIN timeline, along with its medication-introduction bridge. After the second
+assessment result, a7-second actual charge-role nurse-app take shows the new
+open review and its changed observations, with Sally's note quoted in the caption.
+Then the original7-second illustrative recovery animation stays, followed by a
+5-second recap: “A concern heard. A response recorded. A change brought back to
+the team.” Original logo outro remains. Team review3188, recovery3398, recap3608,
+outro3758. The old Act8-PhysicianReview standalone and sources remain for history.
+No new response/physician decision is fabricated: the follow-up review is open.
+User explicitly requested retaining the illustrative recovery story.
+
 
 The initial response now uses ONE continuous take in the nurse app signed in
 as charge nurse: actual in-app notification → Open patient → Acknowledge →

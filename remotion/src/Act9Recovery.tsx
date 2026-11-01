@@ -63,31 +63,12 @@ const RecoveryTrends: React.FC = () => (
   </Scene>
 );
 
-const CareLoop: React.FC = () => {
-  const frame = useCurrentFrame();
-  const steps = ["Concern raised", "Assessment recorded", "Changes detected", "Physician reviewed", "Decision recorded"];
-  const completed = interpolate(frame, [12, 92], [0, 4], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return (
-    <Scene dur={150} center>
-      <Eyebrow>The care journey</Eyebrow>
-      <Head size={82}>The concern became action.</Head>
-      <div style={{ position: "relative", width: "100%", paddingTop: 48, margin: "18px 0 20px" }}>
-        <div style={{ position: "absolute", left: "10%", right: "10%", top: 61, height: 3, background: C.line }}>
-          <div style={{ width: `${completed / 4 * 100}%`, height: "100%", background: C.teal }} />
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)" }}>
-          {steps.map((step, index) => <div key={step} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24 }}>
-            <div style={{ position: "relative", width: 28, height: 28, boxSizing: "border-box", borderRadius: "50%",
-              background: completed >= index ? C.teal : C.canvas, border: `3px solid ${completed >= index ? C.teal : C.line2}` }} />
-            <div style={{ fontFamily: C.sans, fontSize: 28, lineHeight: 1.3, color: completed >= index ? C.ink : C.muted,
-              maxWidth: 260, minHeight: 74 }}>{step}</div>
-          </div>)}
-        </div>
-      </div>
-      <Sub>The nurse noticed. The physician decided. Salus kept watch.</Sub>
-    </Scene>
-  );
-};
+const CareLoop: React.FC = () => (
+  <Scene dur={150} center>
+    <Eyebrow>The care journey</Eyebrow>
+    <Head size={74}>{"A concern heard.\nA response recorded.\nA change brought back to the team."}</Head>
+  </Scene>
+);
 
 export const Act9Recovery: React.FC = () => (
   <AbsoluteFill style={{ background: C.canvas }}>
