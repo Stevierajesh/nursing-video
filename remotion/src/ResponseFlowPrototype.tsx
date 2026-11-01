@@ -16,7 +16,6 @@ export const RESPONSE_PROTOTYPE_FRAMES = ENTRY_FRAMES + RESULT_FRAMES + MAP_FRAM
 type Pose = { x: number; y: number; zoom: number };
 type CameraKey = Pose & { frame: number };
 const RESULT_POSE: Pose = { x: 640, y: 280, zoom: 1.5 };
-const QUEUE_POSE: Pose = { x: 600, y: 245, zoom: 1.25 };
 const MAP_HANDOFF_POSE: Pose = { x: 980, y: 680, zoom: 1.4 };
 const HANDOFF_FRAMES = 15;
 
@@ -111,13 +110,14 @@ const ReviewToMap: React.FC = () => (
   </AbsoluteFill>
 );
 
-const ChargeNotification: React.FC<{ showCaption?: boolean }> = ({ showCaption = true }) => {
+const ChargeResponseFlow: React.FC = () => {
   const frame = useCurrentFrame();
   const incomingOpacity = interpolate(frame, [0, HANDOFF_FRAMES], [0, 1], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.quad),
   });
+  const duration = NOTIFICATION_FRAMES + ASSESSMENT_FRAMES + RECORDED_FRAMES;
   return <AbsoluteFill>
-    <Sequence name="Hold the outgoing map during the handoff" durationInFrames={HANDOFF_FRAMES}>
+    <Sequence name="Hold outgoing nurse map for charge-role handoff" durationInFrames={HANDOFF_FRAMES}>
       <Device keys={[{ frame: 0, ...MAP_HANDOFF_POSE }, { frame: HANDOFF_FRAMES, ...MAP_HANDOFF_POSE }]}>
         <Freeze frame={RESULT_FRAMES + MAP_FRAMES - 1}>
           <OffthreadVideo src={staticFile("map-navigation/nurse.webm")} startFrom={36} playbackRate={0.8} muted style={{ width: "100%", height: "100%" }} />
@@ -125,51 +125,26 @@ const ChargeNotification: React.FC<{ showCaption?: boolean }> = ({ showCaption =
       </Device>
     </Sequence>
     <AbsoluteFill style={{ opacity: incomingOpacity }}>
-    <Device keys={[
-      { frame: 0, ...MAP_HANDOFF_POSE },
-      { frame: HANDOFF_FRAMES, ...MAP_HANDOFF_POSE },
-      { frame: 80, x: 1158, y: 260, zoom: 1.9 },
-      { frame: 135, x: 1158, y: 260, zoom: 1.9 },
-      { frame: NOTIFICATION_FRAMES, ...QUEUE_POSE },
-    ]}>
-      <OffthreadVideo src={staticFile("response-prototype/charge.webm")} startFrom={507} muted style={{ width: "100%", height: "100%" }} />
-    </Device>
+      <Device keys={[
+        { frame: 0, ...MAP_HANDOFF_POSE },
+        { frame: HANDOFF_FRAMES, ...MAP_HANDOFF_POSE },
+        { frame: 80, x: 683, y: 180, zoom: 1.5 },
+        { frame: 175, x: 683, y: 180, zoom: 1.5 },
+        { frame: 240, x: 1080, y: 265, zoom: 1.9 },
+        { frame: 395, x: 1080, y: 265, zoom: 1.9 },
+        { frame: 425, x: 1060, y: 185, zoom: 1.9 },
+        { frame: duration, x: 1060, y: 185, zoom: 1.9 },
+      ]}>
+        {/* One take in the nurse app, signed in as charge nurse: notice,
+            Open patient, acknowledgment, assessment note and Mark assessed. */}
+        <OffthreadVideo src={staticFile("charge-app-flow/nurse.webm")} startFrom={534} playbackRate={0.9} muted style={{ width: "100%", height: "100%" }} />
+      </Device>
     </AbsoluteFill>
-    {showCaption && <Caption label="Charge nurse" stillLabel titleDelay={HANDOFF_FRAMES} title={<>The charge nurse<br />is alerted.</>} />}
-  </AbsoluteFill>;
-};
-
-const ASSESSED_POSE: Pose = { x: 1060, y: 185, zoom: 1.9 };
-const PatientAssessment: React.FC = () => {
-  const frame = useCurrentFrame();
-  const incomingOpacity = interpolate(frame, [0, HANDOFF_FRAMES], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.quad),
-  });
-  return <AbsoluteFill>
-    <Sequence name="Hold charge view during assessment handoff" durationInFrames={HANDOFF_FRAMES}>
-      <Freeze frame={NOTIFICATION_FRAMES - 1}><ChargeNotification showCaption={false} /></Freeze>
+    <Sequence name="Charge nurse receives the concern" durationInFrames={NOTIFICATION_FRAMES}>
+      <Caption label="Charge nurse" stillLabel titleDelay={HANDOFF_FRAMES} title={<>The charge nurse<br />is alerted.</>} />
     </Sequence>
-    <AbsoluteFill style={{ opacity: incomingOpacity }}>
-    <Device keys={[
-      { frame: 0, ...QUEUE_POSE },
-      { frame: HANDOFF_FRAMES, ...QUEUE_POSE },
-      { frame: 90, x: 1080, y: 265, zoom: 1.9 },
-      { frame: 190, x: 1080, y: 265, zoom: 1.9 },
-      { frame: ASSESSMENT_FRAMES, ...ASSESSED_POSE },
-    ]}>
-      <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={60} playbackRate={0.9} muted style={{ width: "100%", height: "100%" }} />
-    </Device>
-    </AbsoluteFill>
   </AbsoluteFill>;
 };
-
-const AssessmentRecorded: React.FC = () => (
-  <AbsoluteFill>
-    <Device keys={[{ frame: 0, ...ASSESSED_POSE }, { frame: RECORDED_FRAMES, ...ASSESSED_POSE }]}>
-      <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={279} muted style={{ width: "100%", height: "100%" }} />
-    </Device>
-  </AbsoluteFill>
-);
 
 export const ResponseFlowPrototype: React.FC<{ withMusic?: boolean; slideIn?: boolean }> = ({ withMusic = true, slideIn = false }) => {
   const frame = useCurrentFrame();
@@ -184,9 +159,7 @@ export const ResponseFlowPrototype: React.FC<{ withMusic?: boolean; slideIn?: bo
     <Series>
       <Series.Sequence name="Record the concern" durationInFrames={ENTRY_FRAMES}><ConcernEntry /></Series.Sequence>
       <Series.Sequence name="Navigate from review confirmation to Room 609" durationInFrames={RESULT_FRAMES + MAP_FRAMES}><ReviewToMap /></Series.Sequence>
-      <Series.Sequence name="Charge-nurse notification and acknowledgment" durationInFrames={NOTIFICATION_FRAMES}><ChargeNotification /></Series.Sequence>
-      <Series.Sequence name="Record assessment and monitoring plan" durationInFrames={ASSESSMENT_FRAMES}><PatientAssessment /></Series.Sequence>
-      <Series.Sequence name="Assessment completed, monitoring continues" durationInFrames={RECORDED_FRAMES}><AssessmentRecorded /></Series.Sequence>
+      <Series.Sequence name="Charge nurse opens, acknowledges and assesses in one app" durationInFrames={NOTIFICATION_FRAMES + ASSESSMENT_FRAMES + RECORDED_FRAMES}><ChargeResponseFlow /></Series.Sequence>
     </Series>
     <Sequence name="Keep the assessment caption still across both shots"
       from={ENTRY_FRAMES + RESULT_FRAMES + MAP_FRAMES + NOTIFICATION_FRAMES}

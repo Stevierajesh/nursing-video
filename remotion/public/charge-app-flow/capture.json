@@ -1,0 +1,19 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "nurse": {},
+  "charge": {},
+  "chargeApp": {
+    "notification": 15.846,
+    "opening": 19.918,
+    "response": 20.938,
+    "acknowledge": 21.639,
+    "acknowledged": 22.62,
+    "typing": 24.214,
+    "typed": 26.118,
+    "assess": 27.503,
+    "recorded": 28.493
+  },
+  "errors": [],
+  "unexpected": []
+}

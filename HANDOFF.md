@@ -2,6 +2,34 @@
 
 ## Current status
 
+Updated 2026-11-01: branch `assessment-response-story`; preview
+http://localhost:3000/SalusDemo. Main film remains4706frames/156.87s; logo956,
+first assessment1295, charge response1945, monitoring2395, reassessment2740.
+Music placement is unchanged. No pushes or new full MP4 exports.
+
+The initial response now uses ONE continuous take in the nurse app signed in
+as charge nurse: actual in-app notification → Open patient → Acknowledge →
+assessment note → Mark assessed → recorded response. No dashboard frontend or
+assessment-entry crossfade in this sequence. `ChargeResponseFlow` in
+ResponseFlowPrototype.tsx uses charge-app-flow/nurse.webm from16s at0.9x for450
+frames, with a gentle camera move. The nurse-to-charge role handoff still has
+its15-frame map dissolve. Static Sally/Timmy caption stays across assessment
+and recorded response. This is a demo recording change; no app changes for it.
+Offline fixture routes and dummy session only; no live writes. Capture script:
+tools/capture-charge-app-flow.mjs, manifest beside the video.
+
+Earlier: real navigation from concern confirmation via Patients to Map is
+recorded in map-navigation/nurse.webm, played0.8x over210frames. Room609 has a
+true amber on/off blink (0.6s each) from the nurse app's pending-concern state;
+NEWS remains0 and combined score3/10. That app visual change was committed in
+the nurse-app repo. Map caption: “Her concern becomes visible to the team.”
+Charge caption: “The charge nurse is alerted.” Monitoring caption restored in
+full: “2 · Watch · Baseline” / “Salus keeps watching.” / “Timmy's observations
+keep updating.” Current monitoring length345frames. See CODEX-NOTES.md for
+latest detailed changes; the entries below are historical and may be superseded.
+
+## Earlier revision notes (historical)
+
 Watch scene's first two caption beats now share one “Salus keeps watching.”
 headline through frames0–270, replacing “A plan to keep watching” and “Her concern
 prompted a review”. No eyebrow/subtitle or second reveal. Final new-changes beat,
