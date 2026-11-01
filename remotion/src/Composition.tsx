@@ -20,7 +20,7 @@ export const BAR = (240 / 119) * FPS;          // 60.504 frames
    seek point in seconds, regardless of the source file's own frame rate.
    (The webm is 25fps; that does not enter into it.) */
 const bars = (n: number) => Math.round(n * BAR);
-export const ACT5_FRAMES = 360;
+export const ACT5_FRAMES = 420;
 export const ACT7_FRAMES = 150;
 export const ACT8_FRAMES = 783;
 
@@ -316,11 +316,11 @@ export const Act5Watch: React.FC = () => (
       }}><WatchTimeLapseScreen /></SegView>
     </Sequence>
     <AbsoluteFill style={{ left: 1060, background: "linear-gradient(90deg, transparent 0px, #f3f6f8 65px)" }} />
-    <Sequence name="Salus keeps watching throughout the change" durationInFrames={270}>
+    <Sequence name="Salus keeps watching throughout the change" durationInFrames={ACT5_FRAMES - 90}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "2 · Watch · Baseline", head: "Salus keeps\nwatching.",
         sub: "Timmy's observations keep updating." }} />
     </Sequence>
-    <Sequence name="The risk update is visible in Salus" from={270} durationInFrames={90}>
+    <Sequence name="The risk update is visible in Salus" from={ACT5_FRAMES - 90} durationInFrames={90}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "New observations", head: "New changes.\nTime to reassess." }} />
     </Sequence>
     <WatchClock />

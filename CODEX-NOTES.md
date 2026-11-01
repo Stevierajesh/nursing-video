@@ -417,3 +417,7 @@ User preferred the original Salus-watching message over the two new monitoring c
 ## Restore the full original monitoring caption
 
 Confirmed the original wording in baseline commit5f3228d, then restored the eyebrow “2 · Watch · Baseline” and subtitle “Timmy's observations keep updating.” alongside “Salus keeps watching.” at the user's request. Keeps the current270-frame continuous hold and final reassessment beat; timing and music unchanged. Lint/TypeScript pass.
+
+## Shorten recorded-assessment hold
+
+Reduced the recorded-response shot from90 to30frames (3s to1s). Reallocated60frames to Act5 monitoring (now420), extending the continuous caption and observation animation while preserving the later reassessment start, total film duration and music alignment. Adjusted watch clock fade to the new end. Static assessment caption still spans both assessment shots. Lint/TypeScript pass.
