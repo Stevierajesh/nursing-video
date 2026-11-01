@@ -6,11 +6,12 @@ import { OPENING_FRAMES } from "./TypeActs";
 
 const BASELINE_HOLD_FRAMES = 90;
 const ENTRY_FRAMES = 350 + BASELINE_HOLD_FRAMES;
-const RESULT_FRAMES = 135;
+const RESULT_FRAMES = 60;
+const MAP_FRAMES = 75;
 const NOTIFICATION_FRAMES = 180;
 const ASSESSMENT_FRAMES = 240;
 const RECORDED_FRAMES = 30;
-export const RESPONSE_PROTOTYPE_FRAMES = ENTRY_FRAMES + RESULT_FRAMES + NOTIFICATION_FRAMES + ASSESSMENT_FRAMES + RECORDED_FRAMES;
+export const RESPONSE_PROTOTYPE_FRAMES = ENTRY_FRAMES + RESULT_FRAMES + MAP_FRAMES + NOTIFICATION_FRAMES + ASSESSMENT_FRAMES + RECORDED_FRAMES;
 
 type Pose = { x: number; y: number; zoom: number };
 type CameraKey = Pose & { frame: number };
@@ -93,7 +94,16 @@ const ReviewRequested: React.FC = () => (
       {/* Skip the waiting/toast overlay; retain the real UI's complete verdict. */}
       <OffthreadVideo src={staticFile("response-prototype/nurse.webm")} startFrom={645} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Review requested" title={<>Sally's concern<br />starts an escalation.</>}>Stable vital signs do not block a charge-nurse review.</Caption>
+    <Freeze frame={60}><Caption label="Review requested" title={<>Sally's concern<br />starts an escalation.</>} /></Freeze>
+  </AbsoluteFill>
+);
+
+const ConcernOnMap: React.FC = () => (
+  <AbsoluteFill>
+    <Device keys={[{ frame: 0, x: 980, y: 680, zoom: 1.45 }, { frame: MAP_FRAMES, x: 995, y: 680, zoom: 1.55 }]}>
+      <OffthreadVideo src={staticFile("concern-map/nurse.webm")} startFrom={75} muted style={{ width: "100%", height: "100%" }} />
+    </Device>
+    <Freeze frame={60}><Caption label="Room 609" title={<>Her concern<br />becomes visible<br />to the team.</>} /></Freeze>
   </AbsoluteFill>
 );
 
@@ -136,12 +146,13 @@ export const ResponseFlowPrototype: React.FC<{ withMusic?: boolean; slideIn?: bo
     <Series>
       <Series.Sequence name="Record the concern" durationInFrames={ENTRY_FRAMES}><ConcernEntry /></Series.Sequence>
       <Series.Sequence name="Yellow review confirmation" durationInFrames={RESULT_FRAMES}><ReviewRequested /></Series.Sequence>
+      <Series.Sequence name="Room 609: pending concern becomes visible" durationInFrames={MAP_FRAMES}><ConcernOnMap /></Series.Sequence>
       <Series.Sequence name="Charge-nurse notification and acknowledgment" durationInFrames={NOTIFICATION_FRAMES}><ChargeNotification /></Series.Sequence>
       <Series.Sequence name="Record assessment and monitoring plan" durationInFrames={ASSESSMENT_FRAMES}><PatientAssessment /></Series.Sequence>
       <Series.Sequence name="Assessment completed, monitoring continues" durationInFrames={RECORDED_FRAMES}><AssessmentRecorded /></Series.Sequence>
     </Series>
     <Sequence name="Keep the assessment caption still across both shots"
-      from={ENTRY_FRAMES + RESULT_FRAMES + NOTIFICATION_FRAMES}
+      from={ENTRY_FRAMES + RESULT_FRAMES + MAP_FRAMES + NOTIFICATION_FRAMES}
       durationInFrames={ASSESSMENT_FRAMES + RECORDED_FRAMES}>
       <Freeze frame={60}>
         <Caption label="Charge-nurse assessment" title={<>Sally&apos;s concern<br />led to action.</>}>A charge nurse assessed Timmy.</Caption>

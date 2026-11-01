@@ -1,0 +1,25 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "nurse": {
+    "ready": 1.738
+  },
+  "charge": {},
+  "pulseStyle": {
+    "animation": "room-concern-pulse",
+    "border": "3px",
+    "color": "rgb(161, 98, 7)"
+  },
+  "room": {
+    "x": 904.229248046875,
+    "y": 702.2838134765625,
+    "width": 344.4322509765625,
+    "height": 205.2239990234375
+  },
+  "alertState": {
+    "pulse": true,
+    "red": false
+  },
+  "errors": [],
+  "unexpected": []
+}
