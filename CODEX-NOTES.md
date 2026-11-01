@@ -491,3 +491,7 @@ User requested a tighter notification close-up. Changed the settled notification
 ## Improve opening observations caption contrast
 
 User requested bolder text below the normal-vitals cards. Styled only “Her nurse saw a change these numbers couldn’t show.” with700 weight and dark ink, preserving its size, reveal, placement and timing. Other subtitles unchanged. Lint/TypeScript pass.
+
+## Combine the changed-observations message into reassessment
+
+User approved removing the final monitoring caption (“New observations / New changes. Time to reassess.”) and summarizing on the second assessment instead. Removed that final90-frame caption sequence; monitoring footage/clock continue with no replacement text. Earlier Salus keeps watching caption remains. Second-assessment headline now “Timmy’s observations changed. Sally raises a fresh concern.” with the existing eyebrow and388-frame span. Timing, source, values and music unchanged. Lint/TypeScript pass; main2830 visually checked at remotion/out/reassessment-story-caption.png.

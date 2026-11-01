@@ -293,7 +293,7 @@ export const SecondAssessmentPreview: React.FC = () => (
     <SegView s={{ ...TIMED[1], cards: [] }}><ReassessmentFootage /></SegView>
     <Sequence name="Continue the time-lapse framing into reassessment" durationInFrames={60}><ReassessmentHandoffMatte /></Sequence>
     <Sequence name="Act 6: One explanation through the complete reassessment" durationInFrames={388}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Second assessment", head: "Pressure falling.\nRates rising." }} />
+      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Second assessment", head: "Timmy’s observations changed.\nSally raises a fresh concern." }} />
     </Sequence>
     <Sequence name="Act 6: Recorded 6 out of 10 result" from={388} durationInFrames={150}><ReassessmentResult /></Sequence>
     <div style={{ position: "absolute", zIndex: 10, bottom: 25, left: 80, right: 80, textAlign: "right",
@@ -319,9 +319,6 @@ export const Act5Watch: React.FC = () => (
     <Sequence name="Salus keeps watching throughout the change" durationInFrames={ACT5_FRAMES - 90}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "2 · Watch · Baseline", head: "Salus keeps\nwatching.",
         sub: "Timmy's observations keep updating." }} />
-    </Sequence>
-    <Sequence name="The risk update is visible in Salus" from={ACT5_FRAMES - 90} durationInFrames={90}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "New observations", head: "New changes.\nTime to reassess." }} />
     </Sequence>
     <WatchClock />
   </AbsoluteFill>
