@@ -465,3 +465,7 @@ User approved a0.5s crossfade between map and charge-account notification with m
 ## Skip loading at assessment entry
 
 User flagged loading around1:11.04. Inspected the assessment source: loaded view appears around1.75s. Moved assessment trim from36→60 (2s), with0.9x playback to retain the same8-second scene and original source endpoint9.2s. Assessment action and recorded-response handoff remain intact, captions/timing/music unchanged. Lint/TypeScript pass; first main assessment frame2125 visually verified as fully loaded in remotion/out/assessment-loaded-start.png.
+
+## Smooth charge-board to assessment handoff
+
+User flagged the next abrupt board-to-form cut. Added15-frame crossfade from exact outgoing charge frame179 (caption suppressed) into the loaded assessment view. Incoming tablet starts at the queue pose, holds through the fade, then eases toward the form over75frames before continuing the existing end camera. Shared static Sally/Timmy caption preserved across assessment and recorded response. Same source trim and playback, scene boundaries, total4706frames and music. Lint/TypeScript pass; main frames2125/2215 visually checked and Studio played across the handoff with zero page errors.

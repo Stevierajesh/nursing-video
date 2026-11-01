@@ -111,7 +111,7 @@ const ReviewToMap: React.FC = () => (
   </AbsoluteFill>
 );
 
-const ChargeNotification: React.FC = () => {
+const ChargeNotification: React.FC<{ showCaption?: boolean }> = ({ showCaption = true }) => {
   const frame = useCurrentFrame();
   const incomingOpacity = interpolate(frame, [0, HANDOFF_FRAMES], [0, 1], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.quad),
@@ -135,18 +135,33 @@ const ChargeNotification: React.FC = () => {
       <OffthreadVideo src={staticFile("response-prototype/charge.webm")} startFrom={507} muted style={{ width: "100%", height: "100%" }} />
     </Device>
     </AbsoluteFill>
-    <Caption label="Charge nurse" stillLabel titleDelay={HANDOFF_FRAMES} title={<>The charge nurse<br />is alerted.</>} />
+    {showCaption && <Caption label="Charge nurse" stillLabel titleDelay={HANDOFF_FRAMES} title={<>The charge nurse<br />is alerted.</>} />}
   </AbsoluteFill>;
 };
 
 const ASSESSED_POSE: Pose = { x: 1060, y: 185, zoom: 1.9 };
-const PatientAssessment: React.FC = () => (
-  <AbsoluteFill>
-    <Device keys={[{ frame: 0, x: 1080, y: 265, zoom: 1.9 }, { frame: 190, x: 1080, y: 265, zoom: 1.9 }, { frame: ASSESSMENT_FRAMES, ...ASSESSED_POSE }]}>
+const PatientAssessment: React.FC = () => {
+  const frame = useCurrentFrame();
+  const incomingOpacity = interpolate(frame, [0, HANDOFF_FRAMES], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.quad),
+  });
+  return <AbsoluteFill>
+    <Sequence name="Hold charge view during assessment handoff" durationInFrames={HANDOFF_FRAMES}>
+      <Freeze frame={NOTIFICATION_FRAMES - 1}><ChargeNotification showCaption={false} /></Freeze>
+    </Sequence>
+    <AbsoluteFill style={{ opacity: incomingOpacity }}>
+    <Device keys={[
+      { frame: 0, ...QUEUE_POSE },
+      { frame: HANDOFF_FRAMES, ...QUEUE_POSE },
+      { frame: 90, x: 1080, y: 265, zoom: 1.9 },
+      { frame: 190, x: 1080, y: 265, zoom: 1.9 },
+      { frame: ASSESSMENT_FRAMES, ...ASSESSED_POSE },
+    ]}>
       <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={60} playbackRate={0.9} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-  </AbsoluteFill>
-);
+    </AbsoluteFill>
+  </AbsoluteFill>;
+};
 
 const AssessmentRecorded: React.FC = () => (
   <AbsoluteFill>
