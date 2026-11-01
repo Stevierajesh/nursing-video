@@ -44,7 +44,7 @@ export const ColdOpen: React.FC = () => (
       <Scene dur={OBSERVATIONS}>
         <Eyebrow revealFrames={24}>Observations</Eyebrow>
         <Tiles d={8} tiles={[{k:"HR",v:"78",u:"bpm"},{k:"RR",v:"16",u:"/min"},{k:"SpO₂",v:"97",u:"%"},{k:"BP",v:"124/78"},{k:"Temp",v:"36.8",u:"°C"}]} />
-        <Sub d={34} revealFrames={24}>Her nurse saw a change these numbers couldn&apos;t show.</Sub>
+        <Sub d={34} revealFrames={24}><span style={{ fontWeight: 700, color: C.ink }}>Her nurse saw a change these numbers couldn&apos;t show.</span></Sub>
       </Scene>
     </Sequence>
     <Sequence name="The nurse said something" from={CLOCK + ADMISSION + OBSERVATIONS} durationInFrames={NURSE}>

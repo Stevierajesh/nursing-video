@@ -487,3 +487,7 @@ User flagged the time-lapse charts looking newly started. Replaced the short gro
 ## Zoom closer to the charge notification
 
 User requested a tighter notification close-up. Changed the settled notification camera from1.5x at683/180 to2.7x at683/100, keeping the complete toast and Open patient button visible. Same smooth keyframe timing and continuous source; assessment camera, captions, runtime and music unchanged. Lint/TypeScript pass; main2045 visually checked at remotion/out/notification-closeup.png.
+
+## Improve opening observations caption contrast
+
+User requested bolder text below the normal-vitals cards. Styled only “Her nurse saw a change these numbers couldn’t show.” with700 weight and dark ink, preserving its size, reveal, placement and timing. Other subtitles unchanged. Lint/TypeScript pass.
