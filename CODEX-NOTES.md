@@ -443,3 +443,7 @@ User approved replacing the repeated notification message with “The charge nur
 ## Stronger amber map pulse
 
 User requested more visible yellow flashing. Increased the real app pending-concern pulse from4–20% to8–38% amber opacity, brightened and thickened the border3→4px, and added a soft5px halo at peak. Kept the slow2.4s cycle and reduced-motion handling. Re-recorded the same offline map view, with capture assertion updated to4px. Zero errors/unexpected API calls; main frame1835 visually checked at remotion/out/stronger-map-pulse.png. Clip placement, duration, captions and soundtrack unchanged. App CSS committed separately.
+
+## Make the map visibly blink
+
+User clarified that stronger temporal contrast was needed. Replaced the smooth amber pulse with a stepped1.2-second cycle:0.6s fully on,0.6s fully off. Room border, fill and halo disappear together; underlying room and bed status stay readable. Reduced-motion handling retained. Re-recorded actual offline app footage; capture verifies opacity samples include both0 and1 with zero errors/unexpected API calls. Extracted six consecutive video samples at5fps and visually confirmed clear on/off states (remotion/out/map-blink-comparison.png). App CSS committed separately; main timeline/music unchanged.

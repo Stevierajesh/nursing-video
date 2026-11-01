@@ -102,7 +102,14 @@ try {
   if(!state.pulse||state.red)throw Error('Expected amber pending-concern room');
   map.mark('ready');manifest.room=box;manifest.alertState=state;
   await map.page.screenshot({path:out+'map.png'});
-  await map.page.waitForTimeout(7500);
+  const blinkOpacities=[];
+  for(let i=0;i<8;i++) {
+    blinkOpacities.push(await room.evaluate(el=>Number(getComputedStyle(el.parentElement,'::after').opacity)));
+    await map.page.waitForTimeout(180);
+  }
+  if(!blinkOpacities.includes(0)||!blinkOpacities.includes(1))throw Error('Room highlight must visibly switch fully on and off');
+  manifest.blinkOpacities=blinkOpacities;
+  await map.page.waitForTimeout(6060);
   if(errors.length||unexpected.length)throw Error(JSON.stringify({errors,unexpected}));
   const video=map.page.video();await map.ctx.close();
   mkdirSync(root+'remotion/public/concern-map/',{recursive:true});
