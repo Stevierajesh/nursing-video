@@ -2,6 +2,10 @@
 
 ## Current status
 
+Recorded-response hold now has no right-side caption: removed “Response recorded”,
+“Assessment recorded.” and “Monitoring continues.” at the user's request. Footage,
+hold duration and persistent rehearsal label remain; main/preview share the change.
+
 Assessment-entry caption now reads “Sally's concern led to action.” / “A charge
 nurse assessed Timmy.” User selected this replacement for “An assessment. A
 recorded plan.” Same source footage and timing. Lint/TypeScript pass; checked

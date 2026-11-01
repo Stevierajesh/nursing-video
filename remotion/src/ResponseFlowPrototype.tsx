@@ -121,7 +121,6 @@ const AssessmentRecorded: React.FC = () => (
     <Device keys={[{ frame: 0, ...ASSESSED_POSE }, { frame: RECORDED_FRAMES, ...ASSESSED_POSE }]}>
       <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={279} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Response recorded" title={<>Assessment<br />recorded.</>}>Monitoring continues.</Caption>
   </AbsoluteFill>
 );
 

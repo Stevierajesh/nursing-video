@@ -397,3 +397,7 @@ Main Studio played frames2000→3502 through assessment/plan, monitoring, new co
 ## Bring Sally and Timmy into the assessment caption
 
 User chose the first proposed replacement: “Sally's concern led to action.” / “A charge nurse assessed Timmy.” Replaced “An assessment. A recorded plan.” in the shared assessment scene. Same footage, duration, music and browser-rehearsal label. Lint/TypeScript pass; response frame910 visually checked at remotion/out/sally-concern-action.png. Main inherits the change; no MP4 export.
+
+## Remove redundant recorded-response caption
+
+User requested no right-side text on the following recorded-response hold. Removed its Caption (eyebrow, headline and subtitle); footage/duration and persistent rehearsal footer unchanged. Applies in main and response preview. Lint/TypeScript pass. No MP4 export.
