@@ -479,3 +479,7 @@ Replaced three separate footage segments and their internal crossfade with one45
 ## Use the approved realistic assessment note
 
 User approved: “Reviewed Timmy at bedside following Sally’s concern. Repeat observations in 10 minutes; reassess sooner if symptoms change.” Updated the offline fixture and generator wording, keeping assessmentNote equal to assessed.resolution_note. Re-recorded the whole continuous charge-app take with the exact note typed and submitted; final status assessed, zero page errors/unexpected API calls. Same clip placement, playback, cameras, captions, runtime and music. Visually checked full note at main2330 and recorded response at2394. Updated handoff. Historical unused assessment footage retained. No live clinical writes or app changes.
+
+## Keep vital trend histories continuous
+
+User flagged the time-lapse charts looking newly started. Replaced the short growing paths with full-width rolling histories from the first frame. A fixed65-point mesh samples the existing illustrative series in a moving history window; baseline stays visible while new observations enter at the right edge. The latest-reading marker stays at the right, and line geometry changes continuously rather than extending from a short stub. Preserves recorded endpoint values, original final trend shape, scales, labels, timing and music. Shared main, watch preview and reassessment handoff freeze. Lint/TypeScript pass; start and final trend frames visually checked in remotion/out/full-history-start.png and full-history-end.png.

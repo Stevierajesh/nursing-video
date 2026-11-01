@@ -27,7 +27,8 @@ NEWS remains0 and combined score3/10. That app visual change was committed in
 the nurse-app repo. Map caption: “Her concern becomes visible to the team.”
 Charge caption: “The charge nurse is alerted.” Monitoring caption restored in
 full: “2 · Watch · Baseline” / “Salus keeps watching.” / “Timmy's observations
-keep updating.” Current monitoring length345frames. See CODEX-NOTES.md for
+keep updating.” Trend charts now show full-width rolling histories from the start, continuously
+reshaping toward their existing endpoints. Current monitoring length345frames. See CODEX-NOTES.md for
 latest detailed changes; the entries below are historical and may be superseded.
 
 ## Earlier revision notes (historical)

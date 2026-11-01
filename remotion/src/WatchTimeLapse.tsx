@@ -37,10 +37,13 @@ const LiveVital: React.FC<{ field: VitalKey; label: string; unit: string; baseli
   const flag = field === "heart_rate" && rounded > 100 ? "Watch"
     : field === "resp_rate" && rounded >= 21 ? "Elevated"
     : field === "systolic_bp" && rounded <= 110 ? "Low" : "";
-  // Retain a calm history on the left and append new samples across ten minutes.
-  const history = [0, 1, 2, 3, 4].map(index => ({ x: index * 10, value: SERIES[field][0] }));
-  const recent = MINUTES.filter(minute => minute > 0 && minute <= minutes).map(minute => ({ x: 40 + minute * 12, value: readingAt(field, minute) }));
-  const points = [...history, ...recent, { x: 40 + minutes * 12, value }];
+  // Keep a full history window on screen from the start. New observations
+  // enter at the right edge while the established baseline scrolls left.
+  const points = Array.from({ length: 65 }, (_, index) => {
+    const x = index * 2.5;
+    const sampleMinute = Math.max(0, minutes - (160 - x) / 12);
+    return { x, value: readingAt(field, sampleMinute) };
+  });
   const y = (number: number) => interpolate(number, domain, [40, 4]);
   const path = points.map((point, index) => `${index ? "L" : "M"}${point.x},${y(point.value)}`).join(" ");
   return <div style={{ padding: "12px 13px", background: flag ? `${tone}09` : "#f7f9fa", border: `1px solid ${flag ? `${tone}50` : C.line}`,
@@ -53,7 +56,7 @@ const LiveVital: React.FC<{ field: VitalKey; label: string; unit: string; baseli
     </div>
     <svg viewBox="0 0 165 46" style={{ width: "100%", height: 46, marginTop: "auto", overflow: "visible" }} role="img" aria-label={`${label} demo time-lapse trend`}>
       <path d={path} stroke={tone} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <circle cx={40 + minutes * 12} cy={y(value)} r={2.5} fill={tone} />
+      <circle cx={160} cy={y(value)} r={2.5} fill={tone} />
     </svg>
     <div style={{ fontSize: 10, color: C.muted }}>Baseline {baseline}</div>
   </div>;
