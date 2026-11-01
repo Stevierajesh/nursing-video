@@ -112,7 +112,6 @@ const PatientAssessment: React.FC = () => (
     <Device keys={[{ frame: 0, x: 1080, y: 265, zoom: 1.9 }, { frame: 190, x: 1080, y: 265, zoom: 1.9 }, { frame: ASSESSMENT_FRAMES, ...ASSESSED_POSE }]}>
       <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={36} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Charge-nurse assessment" title={<>Sally&apos;s concern<br />led to action.</>}>A charge nurse assessed Timmy.</Caption>
   </AbsoluteFill>
 );
 
@@ -121,7 +120,6 @@ const AssessmentRecorded: React.FC = () => (
     <Device keys={[{ frame: 0, ...ASSESSED_POSE }, { frame: RECORDED_FRAMES, ...ASSESSED_POSE }]}>
       <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={279} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Charge-nurse assessment" title={<>Sally&apos;s concern<br />led to action.</>}>A charge nurse assessed Timmy.</Caption>
   </AbsoluteFill>
 );
 
@@ -142,6 +140,13 @@ export const ResponseFlowPrototype: React.FC<{ withMusic?: boolean; slideIn?: bo
       <Series.Sequence name="Record assessment and monitoring plan" durationInFrames={ASSESSMENT_FRAMES}><PatientAssessment /></Series.Sequence>
       <Series.Sequence name="Assessment completed, monitoring continues" durationInFrames={RECORDED_FRAMES}><AssessmentRecorded /></Series.Sequence>
     </Series>
+    <Sequence name="Keep the assessment caption still across both shots"
+      from={ENTRY_FRAMES + RESULT_FRAMES + NOTIFICATION_FRAMES}
+      durationInFrames={ASSESSMENT_FRAMES + RECORDED_FRAMES}>
+      <Freeze frame={60}>
+        <Caption label="Charge-nurse assessment" title={<>Sally&apos;s concern<br />led to action.</>}>A charge nurse assessed Timmy.</Caption>
+      </Freeze>
+    </Sequence>
     <div style={{ position: "absolute", zIndex: 10, bottom: 25, left: 80, right: 80, textAlign: "right",
       fontFamily: C.sans, fontSize: 22, color: C.muted }}>
       Prototype flow · browser-only rehearsal

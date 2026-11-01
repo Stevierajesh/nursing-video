@@ -405,3 +405,7 @@ User requested no right-side text on the following recorded-response hold. Remov
 ## Keep Sally/Timmy caption across the follow-up frame
 
 User clarified the previous request: preserve “Sally's concern led to action.” / “A charge nurse assessed Timmy.” on the recorded-response frame too, instead of switching to the redundant Assessment recorded caption or going blank. Both assessment shots now use the chosen caption. Timing/source footage unchanged. Lint/TypeScript pass.
+
+## Keep the assessment caption still
+
+User identified a repeated text reveal at the shot boundary. Removed the two shot-local Caption instances and added one shared330-frame sequence spanning assessment and recorded response, with caption held at frame60 so all text is fully revealed and stationary. No reveal/restart at either shot. Footage/camera/timing/music unchanged. Lint/TypeScript pass; response frame1000 just after the cut visually checked at remotion/out/assessment-caption-still.png.

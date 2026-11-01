@@ -2,6 +2,11 @@
 
 ## Current status
 
+Sally/Timmy assessment caption now stays fully visible and still across the
+assessment and recorded-response shots. One shared 330-frame caption sequence
+replaces two independently animated instances; its reveal is held at completed
+frame60. Removes the second-shot wipe/restart. Timing and footage unchanged.
+
 Correction to the last caption removal: user meant to keep “Sally's concern led
 to action.” / “A charge nurse assessed Timmy.” on the follow-up recorded-response
 frame as well. Both assessment shots now use that caption; obsolete “Assessment
