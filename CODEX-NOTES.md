@@ -413,3 +413,7 @@ User identified a repeated text reveal at the shot boundary. Removed the two sho
 ## Restore the monitoring headline
 
 User preferred the original Salus-watching message over the two new monitoring captions. Combined the first270frames of Act5 into one persistent “Salus keeps watching.” headline, without eyebrow/subtitle or a second reveal. Final “New changes. Time to reassess.” beat stays as is. Clock, observations, timing and music unchanged. Lint/TypeScript pass. No MP4 export.
+
+## Restore the full original monitoring caption
+
+Confirmed the original wording in baseline commit5f3228d, then restored the eyebrow “2 · Watch · Baseline” and subtitle “Timmy's observations keep updating.” alongside “Salus keeps watching.” at the user's request. Keeps the current270-frame continuous hold and final reassessment beat; timing and music unchanged. Lint/TypeScript pass.

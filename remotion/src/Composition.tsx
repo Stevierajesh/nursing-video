@@ -317,7 +317,8 @@ export const Act5Watch: React.FC = () => (
     </Sequence>
     <AbsoluteFill style={{ left: 1060, background: "linear-gradient(90deg, transparent 0px, #f3f6f8 65px)" }} />
     <Sequence name="Salus keeps watching throughout the change" durationInFrames={270}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, head: "Salus keeps\nwatching." }} />
+      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "2 · Watch · Baseline", head: "Salus keeps\nwatching.",
+        sub: "Timmy's observations keep updating." }} />
     </Sequence>
     <Sequence name="The risk update is visible in Salus" from={270} durationInFrames={90}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "New observations", head: "New changes.\nTime to reassess." }} />
