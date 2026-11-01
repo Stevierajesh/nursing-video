@@ -20,7 +20,7 @@ export const BAR = (240 / 119) * FPS;          // 60.504 frames
    seek point in seconds, regardless of the source file's own frame rate.
    (The webm is 25fps; that does not enter into it.) */
 const bars = (n: number) => Math.round(n * BAR);
-export const ACT5_FRAMES = 390;
+export const ACT5_FRAMES = 345;
 export const ACT7_FRAMES = 150;
 export const ACT8_FRAMES = 783;
 

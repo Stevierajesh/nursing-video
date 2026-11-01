@@ -14,7 +14,7 @@ const SERIES = {
   temperature_c: [36.9, 36.9, 36.8, 36.8, 36.9, 36.9, 36.9, 37.0],
 };
 type VitalKey = keyof typeof SERIES;
-const minutesAt = (frame: number) => interpolate(frame, [60, 300], [0, 10], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+const minutesAt = (frame: number) => interpolate(frame, [60, 255], [0, 10], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 const readingAt = (key: VitalKey, minutes: number) => interpolate(minutes, MINUTES, SERIES[key]);
 // Match the first-assessment capture's 5:01:25 PM baseline. Format explicitly
 // so the demo clock stays identical in Studio and renders in any time zone.
@@ -123,7 +123,7 @@ export const WatchClock: React.FC = () => {
   const frame = useCurrentFrame();
   const minutes = minutesAt(frame);
   return <div style={{ position: "absolute", left: 1313, top: 160, width: 500, color: C.teal, fontFamily: C.mono,
-    opacity: interpolate(frame, [378, 389], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+    opacity: interpolate(frame, [333, 344], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
     <div style={{ fontSize: 18, letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 12 }}>Demo time-lapse</div>
     <div style={{ fontSize: 62, fontVariantNumeric: "tabular-nums" }}>{clockTime(minutes)}</div>
     <div style={{ height: 4, background: C.line, marginTop: 16, borderRadius: 5 }}>

@@ -6,8 +6,8 @@ import { OPENING_FRAMES } from "./TypeActs";
 
 const BASELINE_HOLD_FRAMES = 90;
 const ENTRY_FRAMES = 350 + BASELINE_HOLD_FRAMES;
-const RESULT_FRAMES = 60;
-const MAP_FRAMES = 105;
+const RESULT_FRAMES = 90;
+const MAP_FRAMES = 120;
 const NOTIFICATION_FRAMES = 180;
 const ASSESSMENT_FRAMES = 240;
 const RECORDED_FRAMES = 30;
@@ -93,12 +93,12 @@ const ReviewToMap: React.FC = () => (
     <Device keys={[
       { frame: 0, ...RESULT_POSE },
       { frame: 12, ...RESULT_POSE },
-      { frame: 38, x: 750, y: 500, zoom: 1.05 },
-      { frame: 72, x: 750, y: 500, zoom: 1.05 },
-      { frame: 105, x: 980, y: 680, zoom: 1.45 },
-      { frame: RESULT_FRAMES + MAP_FRAMES, x: 995, y: 680, zoom: 1.55 },
+      { frame: 65, x: 750, y: 500, zoom: 1.05 },
+      { frame: 110, x: 750, y: 500, zoom: 1.05 },
+      { frame: 195, x: 980, y: 680, zoom: 1.4 },
+      { frame: RESULT_FRAMES + MAP_FRAMES, x: 980, y: 680, zoom: 1.4 },
     ]}>
-      <OffthreadVideo src={staticFile("map-navigation/nurse.webm")} startFrom={36} muted style={{ width: "100%", height: "100%" }} />
+      <OffthreadVideo src={staticFile("map-navigation/nurse.webm")} startFrom={36} playbackRate={0.8} muted style={{ width: "100%", height: "100%" }} />
     </Device>
     <Sequence name="Concern starts an escalation" durationInFrames={RESULT_FRAMES}>
       <Freeze frame={60}><Caption label="Review requested" title={<>Sally's concern<br />starts an escalation.</>} /></Freeze>
