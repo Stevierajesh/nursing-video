@@ -112,7 +112,7 @@ const PatientAssessment: React.FC = () => (
     <Device keys={[{ frame: 0, x: 1080, y: 265, zoom: 1.9 }, { frame: 190, x: 1080, y: 265, zoom: 1.9 }, { frame: ASSESSMENT_FRAMES, ...ASSESSED_POSE }]}>
       <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={36} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Charge-nurse assessment" title={<>An assessment.<br />A recorded plan.</>} />
+    <Caption label="Charge-nurse assessment" title={<>Sally&apos;s concern<br />led to action.</>}>A charge nurse assessed Timmy.</Caption>
   </AbsoluteFill>
 );
 

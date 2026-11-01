@@ -2,6 +2,11 @@
 
 ## Current status
 
+Assessment-entry caption now reads “Sally's concern led to action.” / “A charge
+nurse assessed Timmy.” User selected this replacement for “An assessment. A
+recorded plan.” Same source footage and timing. Lint/TypeScript pass; checked
+remotion/out/sally-concern-action.png.
+
 **Latest trial: assessment before monitoring (2026-11-01).** Working branch is
 `assessment-response-story`; `main` preserves the previous acknowledged/pending
 edit. Preview the trial at http://localhost:3000/SalusDemo. The charge nurse now

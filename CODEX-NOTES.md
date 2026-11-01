@@ -393,3 +393,7 @@ Removed old Act7 overdue controls, physician-pool queue and room-map shots from 
 Lint/TypeScript pass; representative assessment plan, recorded response, watch and review stills visually checked in remotion/out/assessment-plan.png, assessment-recorded.png, assessment-watch.png and fresh-review.png. Fixture assertions verify first assessed plan and separate new open follow-up review.
 
 Main Studio played frames2000→3502 through assessment/plan, monitoring, new concern, review bridge and beginning physician request with zero page errors. Composition metadata confirms main4706, response1085, Act7 150. Recorded-response caption finalized as “Assessment recorded.” / “Monitoring continues.”
+
+## Bring Sally and Timmy into the assessment caption
+
+User chose the first proposed replacement: “Sally's concern led to action.” / “A charge nurse assessed Timmy.” Replaced “An assessment. A recorded plan.” in the shared assessment scene. Same footage, duration, music and browser-rehearsal label. Lint/TypeScript pass; response frame910 visually checked at remotion/out/sally-concern-action.png. Main inherits the change; no MP4 export.
