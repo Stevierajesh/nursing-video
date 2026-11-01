@@ -361,8 +361,8 @@
     },
     "acknowledged_by": "charge-demo",
     "assessed_by": "charge-demo",
-    "resolution_note": "Assessment completed in the demo scenario. Continue monitoring observations; reassess if symptoms or readings change."
+    "resolution_note": "Reviewed Timmy at bedside following Sally’s concern. Repeat observations in 10 minutes; reassess sooner if symptoms change."
   },
-  "assessmentNote": "Assessment completed in the demo scenario. Continue monitoring observations; reassess if symptoms or readings change.",
+  "assessmentNote": "Reviewed Timmy at bedside following Sally’s concern. Repeat observations in 10 minutes; reassess sooner if symptoms change.",
   "illustrativeBaselineHistory": true
 }

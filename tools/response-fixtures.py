@@ -152,7 +152,7 @@ with patch.object(Query, "execute", execute), patch.object(DB, "rpc", rpc), \
                        initialRisk=initial_risk, submitted=submitted, review=review,
                        acknowledged=acknowledged, note=note)
         if not reassessment:
-            assessment_note = "Assessment completed in the demo scenario. Continue monitoring observations; reassess if symptoms or readings change."
+            assessment_note = "Reviewed Timmy at bedside following Sally’s concern. Repeat observations in 10 minutes; reassess sooner if symptoms change."
             response = client.post(f"/api/v1/escalations/{review['id']}/assess", json={"note": assessment_note})
             assert response.status_code == 200, response.get_json()
             assessed = {**acknowledged, **response.get_json()["escalation"],

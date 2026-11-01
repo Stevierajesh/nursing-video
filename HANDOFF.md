@@ -15,6 +15,8 @@ ResponseFlowPrototype.tsx uses charge-app-flow/nurse.webm from16s at0.9x for450
 frames, with a gentle camera move. The nurse-to-charge role handoff still has
 its15-frame map dissolve. Static Sally/Timmy caption stays across assessment
 and recorded response. This is a demo recording change; no app changes for it.
+Assessment note: “Reviewed Timmy at bedside following Sally’s concern. Repeat
+observations in 10 minutes; reassess sooner if symptoms change.”
 Offline fixture routes and dummy session only; no live writes. Capture script:
 tools/capture-charge-app-flow.mjs, manifest beside the video.
 
