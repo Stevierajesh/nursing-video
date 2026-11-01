@@ -20,7 +20,10 @@ export const BAR = (240 / 119) * FPS;          // 60.504 frames
    seek point in seconds, regardless of the source file's own frame rate.
    (The webm is 25fps; that does not enter into it.) */
 const bars = (n: number) => Math.round(n * BAR);
-export const ACT5_FRAMES = 345;
+export const ACT5_FRAMES = 255;
+const REASSESSMENT_NOTE_HOLD_FRAMES = 90;
+const REASSESSMENT_ENTRY_FRAMES = 388 + REASSESSMENT_NOTE_HOLD_FRAMES;
+const REASSESSMENT_FRAMES = REASSESSMENT_ENTRY_FRAMES + 150;
 export const ACT7_FRAMES = 150;
 export const ACT8_FRAMES = 783;
 
@@ -83,17 +86,17 @@ const SEGS: Seg[] = [
 
   },
   {
-    src: "reassessment/nurse.webm", at: 0.4, to: 16, len: 0, durationFrames: 538,
+    src: "reassessment/nurse.webm", at: 0.4, to: 16, len: 0, durationFrames: REASSESSMENT_FRAMES,
     keys: [
       { t: 0.00, cam: REASSESSMENT_HANDOFF },
-      { t: 60 / 538, cam: focus(980, 200, 1.30) },
-      { t: 86 / 538, cam: focus(1050, 250, 1.50) },
-      { t: 149 / 538, cam: focus(1000, 360, 1.65) },
-      { t: 201 / 538, cam: focus(1000, 515, 2.40, 570) },
-      { t: 310 / 538, cam: focus(1000, 515, 2.40, 570) },
-      { t: 348 / 538, cam: focus(1000, 618, 1.50) },
-      { t: 372 / 538, cam: focus(1000, 618, 1.50) },
-      { t: 412 / 538, cam: focus(430, 450, 1.30) },
+      { t: 60 / REASSESSMENT_FRAMES, cam: focus(980, 200, 1.30) },
+      { t: 86 / REASSESSMENT_FRAMES, cam: focus(1050, 250, 1.50) },
+      { t: 149 / REASSESSMENT_FRAMES, cam: focus(1000, 360, 1.65) },
+      { t: 201 / REASSESSMENT_FRAMES, cam: focus(1000, 515, 2.40, 570) },
+      { t: (310 + REASSESSMENT_NOTE_HOLD_FRAMES) / REASSESSMENT_FRAMES, cam: focus(1000, 515, 2.40, 570) },
+      { t: (348 + REASSESSMENT_NOTE_HOLD_FRAMES) / REASSESSMENT_FRAMES, cam: focus(1000, 618, 1.50) },
+      { t: (372 + REASSESSMENT_NOTE_HOLD_FRAMES) / REASSESSMENT_FRAMES, cam: focus(1000, 618, 1.50) },
+      { t: (412 + REASSESSMENT_NOTE_HOLD_FRAMES) / REASSESSMENT_FRAMES, cam: focus(430, 450, 1.30) },
       { t: 1.00, cam: focus(430, 450, 1.30) },
     ],
     cards: [], // Act 6 has independently timed overlays below.
@@ -272,8 +275,18 @@ const ReassessmentFootage: React.FC = () => {
     {/* Current app rehearsal: faster typing, a full-note hold, then the actual
         backend-generated verdict. Preserve the enclosing camera and timing. */}
     <Series>
-      <Series.Sequence name="Concern, breathing change and updated note" durationInFrames={388} layout="none">
+      <Series.Sequence name="Concern, breathing change and updated note" durationInFrames={250} layout="none">
         <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={363 / 388} muted style={{ width: "100%", height: "100%" }} />
+      </Series.Sequence>
+      <Series.Sequence name="Read Sally's completed reassessment note" durationInFrames={REASSESSMENT_NOTE_HOLD_FRAMES} layout="none">
+        <Freeze frame={250}>
+          <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={363 / 388} muted style={{ width: "100%", height: "100%" }} />
+        </Freeze>
+      </Series.Sequence>
+      <Series.Sequence name="Continue the reassessment submission" durationInFrames={138} layout="none">
+        <Sequence from={-250} layout="none">
+          <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={363 / 388} muted style={{ width: "100%", height: "100%" }} />
+        </Sequence>
       </Series.Sequence>
       <Series.Sequence name="Hold the current review result" durationInFrames={150} layout="none">
         <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={375} muted style={{ width: "100%", height: "100%" }} />
@@ -292,10 +305,10 @@ export const SecondAssessmentPreview: React.FC = () => (
     {/* One camera move across the trimmed interaction; copy stays in place. */}
     <SegView s={{ ...TIMED[1], cards: [] }}><ReassessmentFootage /></SegView>
     <Sequence name="Continue the time-lapse framing into reassessment" durationInFrames={60}><ReassessmentHandoffMatte /></Sequence>
-    <Sequence name="Act 6: One explanation through the complete reassessment" durationInFrames={388}>
+    <Sequence name="Act 6: One explanation through the complete reassessment" durationInFrames={REASSESSMENT_ENTRY_FRAMES}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Second assessment", head: "Timmy’s observations changed.\nSally raises a fresh concern." }} />
     </Sequence>
-    <Sequence name="Act 6: Recorded 6 out of 10 result" from={388} durationInFrames={150}><ReassessmentResult /></Sequence>
+    <Sequence name="Act 6: Recorded 6 out of 10 result" from={REASSESSMENT_ENTRY_FRAMES} durationInFrames={150}><ReassessmentResult /></Sequence>
     <div style={{ position: "absolute", zIndex: 10, bottom: 25, left: 80, right: 80, textAlign: "right",
       fontFamily: C.sans, fontSize: 22, color: C.muted }}>Prototype flow · browser-only rehearsal</div>
   </AbsoluteFill>
@@ -316,7 +329,7 @@ export const Act5Watch: React.FC = () => (
       }}><WatchTimeLapseScreen /></SegView>
     </Sequence>
     <AbsoluteFill style={{ left: 1060, background: "linear-gradient(90deg, transparent 0px, #f3f6f8 65px)" }} />
-    <Sequence name="Salus keeps watching throughout the change" durationInFrames={ACT5_FRAMES - 90}>
+    <Sequence name="Salus keeps watching throughout the change" durationInFrames={ACT5_FRAMES}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "2 · Watch · Baseline", head: "Salus keeps\nwatching.",
         sub: "Timmy's observations keep updating." }} />
     </Sequence>
