@@ -21,8 +21,7 @@ export const BAR = (240 / 119) * FPS;          // 60.504 frames
    (The webm is 25fps; that does not enter into it.) */
 const bars = (n: number) => Math.round(n * BAR);
 export const ACT5_FRAMES = 255;
-const REASSESSMENT_NOTE_HOLD_FRAMES = 90;
-const REASSESSMENT_ENTRY_FRAMES = 388 + REASSESSMENT_NOTE_HOLD_FRAMES;
+const REASSESSMENT_ENTRY_FRAMES = 388;
 const REASSESSMENT_FRAMES = REASSESSMENT_ENTRY_FRAMES + 150;
 export const ACT7_FRAMES = 150;
 export const ACT8_FRAMES = 783;
@@ -93,10 +92,10 @@ const SEGS: Seg[] = [
       { t: 86 / REASSESSMENT_FRAMES, cam: focus(1050, 250, 1.50) },
       { t: 149 / REASSESSMENT_FRAMES, cam: focus(1000, 360, 1.65) },
       { t: 201 / REASSESSMENT_FRAMES, cam: focus(1000, 515, 2.40, 570) },
-      { t: (310 + REASSESSMENT_NOTE_HOLD_FRAMES) / REASSESSMENT_FRAMES, cam: focus(1000, 515, 2.40, 570) },
-      { t: (348 + REASSESSMENT_NOTE_HOLD_FRAMES) / REASSESSMENT_FRAMES, cam: focus(1000, 618, 1.50) },
-      { t: (372 + REASSESSMENT_NOTE_HOLD_FRAMES) / REASSESSMENT_FRAMES, cam: focus(1000, 618, 1.50) },
-      { t: (412 + REASSESSMENT_NOTE_HOLD_FRAMES) / REASSESSMENT_FRAMES, cam: focus(430, 450, 1.30) },
+      { t: 310 / REASSESSMENT_FRAMES, cam: focus(1000, 515, 2.40, 570) },
+      { t: 348 / REASSESSMENT_FRAMES, cam: focus(1000, 618, 1.50) },
+      { t: 372 / REASSESSMENT_FRAMES, cam: focus(1000, 618, 1.50) },
+      { t: 412 / REASSESSMENT_FRAMES, cam: focus(430, 450, 1.30) },
       { t: 1.00, cam: focus(430, 450, 1.30) },
     ],
     cards: [], // Act 6 has independently timed overlays below.
@@ -275,18 +274,8 @@ const ReassessmentFootage: React.FC = () => {
     {/* Current app rehearsal: faster typing, a full-note hold, then the actual
         backend-generated verdict. Preserve the enclosing camera and timing. */}
     <Series>
-      <Series.Sequence name="Concern, breathing change and updated note" durationInFrames={250} layout="none">
+      <Series.Sequence name="Concern, breathing change and updated note" durationInFrames={REASSESSMENT_ENTRY_FRAMES} layout="none">
         <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={363 / 388} muted style={{ width: "100%", height: "100%" }} />
-      </Series.Sequence>
-      <Series.Sequence name="Read Sally's completed reassessment note" durationInFrames={REASSESSMENT_NOTE_HOLD_FRAMES} layout="none">
-        <Freeze frame={250}>
-          <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={363 / 388} muted style={{ width: "100%", height: "100%" }} />
-        </Freeze>
-      </Series.Sequence>
-      <Series.Sequence name="Continue the reassessment submission" durationInFrames={138} layout="none">
-        <Sequence from={-250} layout="none">
-          <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={363 / 388} muted style={{ width: "100%", height: "100%" }} />
-        </Sequence>
       </Series.Sequence>
       <Series.Sequence name="Hold the current review result" durationInFrames={150} layout="none">
         <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={375} muted style={{ width: "100%", height: "100%" }} />

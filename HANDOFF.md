@@ -3,7 +3,7 @@
 ## Current status
 
 Updated 2026-11-01: branch `assessment-response-story`; preview
-http://localhost:3000/SalusDemo. Main film remains4706frames/156.87s; logo956,
+http://localhost:3000/SalusDemo. Main film is4616frames/153.87s; logo956,
 first assessment1295, charge response1945, monitoring2395, reassessment2650.
 Music placement is unchanged. No pushes or new full MP4 exports.
 
@@ -28,9 +28,10 @@ the nurse-app repo. Map caption: “Her concern becomes visible to the team.”
 Charge caption: “The charge nurse is alerted.” Monitoring caption restored in
 full: “2 · Watch · Baseline” / “Salus keeps watching.” / “Timmy's observations
 keep updating.” Trend charts now show full-width rolling histories from the start, continuously
-reshaping toward their existing endpoints. Current monitoring length255frames; the second assessment lasts628frames,
-including90 extra frames to read the completed note. The captionless monitoring
-tail is removed; the result and all later scene boundaries stay unchanged. See CODEX-NOTES.md for
+reshaping toward their existing endpoints. Current monitoring length255frames; second assessment538frames. The captionless
+monitoring tail and added90-frame note hold are removed. User explicitly released
+music alignment after1:28: do not reallocate cuts into artificial holds. Later
+scenes now run90frames earlier, and the whole film is3seconds shorter. See CODEX-NOTES.md for
 latest detailed changes; the entries below are historical and may be superseded.
 
 ## Earlier revision notes (historical)
