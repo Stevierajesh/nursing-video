@@ -1,0 +1,17 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "nurse": {
+    "result": 0.972,
+    "patients": 2.385,
+    "map": 3.393,
+    "ready": 3.925
+  },
+  "charge": {},
+  "alertState": {
+    "amber": true,
+    "red": false
+  },
+  "errors": [],
+  "unexpected": []
+}

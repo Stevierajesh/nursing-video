@@ -447,3 +447,9 @@ User requested more visible yellow flashing. Increased the real app pending-conc
 ## Make the map visibly blink
 
 User clarified that stronger temporal contrast was needed. Replaced the smooth amber pulse with a stepped1.2-second cycle:0.6s fully on,0.6s fully off. Room border, fill and halo disappear together; underlying room and bed status stay readable. Reduced-motion handling retained. Re-recorded actual offline app footage; capture verifies opacity samples include both0 and1 with zero errors/unexpected API calls. Extracted six consecutive video samples at5fps and visually confirmed clear on/off states (remotion/out/map-blink-comparison.png). App CSS committed separately; main timeline/music unchanged.
+
+## Navigate continuously from verdict to map
+
+User found the verdict-to-map cut jarring and requested actual navigation. Added capture-map-navigation.mjs filming real submission, Back to patients click, Map link click, viewport reframe and blinking Room609 in one continuous offline recording. No live writes, zero page errors/unexpected API calls. Source public/map-navigation/nurse.webm, manifest records result0.972s, patients2.385s, map3.393s, ready3.925s.
+
+Replaced separate verdict/map clips with one165-frame ReviewToMap sequence using source start36, normal playback speed. Camera widens to include the sidebar during navigation, then pushes toward Room609. Existing caption changes after60frames; full map caption holds105frames. Added30frames for readable navigation and removed30frames from later watch (390frames), updating observation interpolation and clock fade. Response1055frames; first1295, watch2350, reassessment2740 unchanged, total4706 and soundtrack unchanged. Shared main/prototype. Lint/TypeScript pass; main frames1785 and1875 checked at remotion/out/map-navigation-wide.png and map-navigation-room.png. No full export.

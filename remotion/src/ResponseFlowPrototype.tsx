@@ -7,7 +7,7 @@ import { OPENING_FRAMES } from "./TypeActs";
 const BASELINE_HOLD_FRAMES = 90;
 const ENTRY_FRAMES = 350 + BASELINE_HOLD_FRAMES;
 const RESULT_FRAMES = 60;
-const MAP_FRAMES = 75;
+const MAP_FRAMES = 105;
 const NOTIFICATION_FRAMES = 180;
 const ASSESSMENT_FRAMES = 240;
 const RECORDED_FRAMES = 30;
@@ -88,22 +88,24 @@ const ConcernEntry: React.FC = () => (
   </AbsoluteFill>
 );
 
-const ReviewRequested: React.FC = () => (
+const ReviewToMap: React.FC = () => (
   <AbsoluteFill>
-    <Device keys={[{ frame: 0, ...RESULT_POSE }, { frame: RESULT_FRAMES, ...RESULT_POSE }]}>
-      {/* Skip the waiting/toast overlay; retain the real UI's complete verdict. */}
-      <OffthreadVideo src={staticFile("response-prototype/nurse.webm")} startFrom={645} muted style={{ width: "100%", height: "100%" }} />
+    <Device keys={[
+      { frame: 0, ...RESULT_POSE },
+      { frame: 12, ...RESULT_POSE },
+      { frame: 38, x: 750, y: 500, zoom: 1.05 },
+      { frame: 72, x: 750, y: 500, zoom: 1.05 },
+      { frame: 105, x: 980, y: 680, zoom: 1.45 },
+      { frame: RESULT_FRAMES + MAP_FRAMES, x: 995, y: 680, zoom: 1.55 },
+    ]}>
+      <OffthreadVideo src={staticFile("map-navigation/nurse.webm")} startFrom={36} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Freeze frame={60}><Caption label="Review requested" title={<>Sally's concern<br />starts an escalation.</>} /></Freeze>
-  </AbsoluteFill>
-);
-
-const ConcernOnMap: React.FC = () => (
-  <AbsoluteFill>
-    <Device keys={[{ frame: 0, x: 980, y: 680, zoom: 1.45 }, { frame: MAP_FRAMES, x: 995, y: 680, zoom: 1.55 }]}>
-      <OffthreadVideo src={staticFile("concern-map/nurse.webm")} startFrom={75} muted style={{ width: "100%", height: "100%" }} />
-    </Device>
-    <Freeze frame={60}><Caption label="Room 609" title={<>Her concern<br />becomes visible<br />to the team.</>} /></Freeze>
+    <Sequence name="Concern starts an escalation" durationInFrames={RESULT_FRAMES}>
+      <Freeze frame={60}><Caption label="Review requested" title={<>Sally's concern<br />starts an escalation.</>} /></Freeze>
+    </Sequence>
+    <Sequence name="Concern becomes visible on the map" from={RESULT_FRAMES} durationInFrames={MAP_FRAMES}>
+      <Freeze frame={60}><Caption label="Room 609" title={<>Her concern<br />becomes visible<br />to the team.</>} /></Freeze>
+    </Sequence>
   </AbsoluteFill>
 );
 
@@ -145,8 +147,7 @@ export const ResponseFlowPrototype: React.FC<{ withMusic?: boolean; slideIn?: bo
     {withMusic && <Audio src={staticFile("b51-q2.wav")} startFrom={OPENING_FRAMES + PATIENT_INTRO_FRAMES - PATIENT_SLIDE_FRAMES} />}
     <Series>
       <Series.Sequence name="Record the concern" durationInFrames={ENTRY_FRAMES}><ConcernEntry /></Series.Sequence>
-      <Series.Sequence name="Yellow review confirmation" durationInFrames={RESULT_FRAMES}><ReviewRequested /></Series.Sequence>
-      <Series.Sequence name="Room 609: pending concern becomes visible" durationInFrames={MAP_FRAMES}><ConcernOnMap /></Series.Sequence>
+      <Series.Sequence name="Navigate from review confirmation to Room 609" durationInFrames={RESULT_FRAMES + MAP_FRAMES}><ReviewToMap /></Series.Sequence>
       <Series.Sequence name="Charge-nurse notification and acknowledgment" durationInFrames={NOTIFICATION_FRAMES}><ChargeNotification /></Series.Sequence>
       <Series.Sequence name="Record assessment and monitoring plan" durationInFrames={ASSESSMENT_FRAMES}><PatientAssessment /></Series.Sequence>
       <Series.Sequence name="Assessment completed, monitoring continues" durationInFrames={RECORDED_FRAMES}><AssessmentRecorded /></Series.Sequence>
