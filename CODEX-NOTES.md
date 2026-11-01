@@ -409,3 +409,7 @@ User clarified the previous request: preserve “Sally's concern led to action.�
 ## Keep the assessment caption still
 
 User identified a repeated text reveal at the shot boundary. Removed the two shot-local Caption instances and added one shared330-frame sequence spanning assessment and recorded response, with caption held at frame60 so all text is fully revealed and stationary. No reveal/restart at either shot. Footage/camera/timing/music unchanged. Lint/TypeScript pass; response frame1000 just after the cut visually checked at remotion/out/assessment-caption-still.png.
+
+## Restore the monitoring headline
+
+User preferred the original Salus-watching message over the two new monitoring captions. Combined the first270frames of Act5 into one persistent “Salus keeps watching.” headline, without eyebrow/subtitle or a second reveal. Final “New changes. Time to reassess.” beat stays as is. Clock, observations, timing and music unchanged. Lint/TypeScript pass. No MP4 export.

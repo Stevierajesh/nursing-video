@@ -316,12 +316,8 @@ export const Act5Watch: React.FC = () => (
       }}><WatchTimeLapseScreen /></SegView>
     </Sequence>
     <AbsoluteFill style={{ left: 1060, background: "linear-gradient(90deg, transparent 0px, #f3f6f8 65px)" }} />
-    <Sequence name="The calm chart" durationInFrames={60}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Assessment recorded", head: "A plan to\nkeep watching.",
-        sub: "Reassess if observations change." }} />
-    </Sequence>
-    <Sequence name="Ten minutes of change, compressed" from={60} durationInFrames={210}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, head: "Her concern\nprompted a review.", sub: "Salus kept watching." }} />
+    <Sequence name="Salus keeps watching throughout the change" durationInFrames={270}>
+      <CopyBlock clearBackground c={{ at: 0, len: 0, head: "Salus keeps\nwatching." }} />
     </Sequence>
     <Sequence name="The risk update is visible in Salus" from={270} durationInFrames={90}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "New observations", head: "New changes.\nTime to reassess." }} />

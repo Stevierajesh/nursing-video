@@ -2,6 +2,11 @@
 
 ## Current status
 
+Watch scene's first two caption beats now share one “Salus keeps watching.”
+headline through frames0–270, replacing “A plan to keep watching” and “Her concern
+prompted a review”. No eyebrow/subtitle or second reveal. Final new-changes beat,
+clock, readings and timing remain unchanged.
+
 Sally/Timmy assessment caption now stays fully visible and still across the
 assessment and recorded-response shots. One shared 330-frame caption sequence
 replaces two independently animated instances; its reveal is held at completed
