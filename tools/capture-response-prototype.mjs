@@ -4,6 +4,7 @@ import {readFileSync, mkdirSync, writeFileSync, copyFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+const chargeOnly = process.argv.includes('--charge-only');
 const out = root + 'build/footage/response-prototype/';
 mkdirSync(out, {recursive:true});
 const fixture = JSON.parse(readFileSync(root+'remotion/public/response-prototype/fixtures.json'));
@@ -107,8 +108,12 @@ try {
   if(errors.length||unexpected.length)throw Error(JSON.stringify({errors,unexpected}));
   for(const [role,capture] of [['nurse',nurse],['charge',charge]]){
     manifest[role].end=Date.now();const video=capture.page.video();await capture.ctx.close();
-    const path=await video.path();copyFileSync(path,root+`remotion/public/response-prototype/${role}.webm`);
+    const path=await video.path();if(!chargeOnly || role==='charge')copyFileSync(path,root+`remotion/public/response-prototype/${role}.webm`);
     manifest[role].video=`response-prototype/${role}.webm`;
+  }
+  if(chargeOnly) {
+    const previous=JSON.parse(readFileSync(root+'remotion/public/response-prototype/capture.json'));
+    manifest.nurse=previous.nurse;
   }
   writeFileSync(root+'remotion/public/response-prototype/capture.json',JSON.stringify({...manifest,errors,unexpected},null,2));
   console.log(JSON.stringify(manifest,null,2));

@@ -425,3 +425,7 @@ Reduced the recorded-response shot from90 to30frames (3s to1s). Reallocated60fra
 ## Name Sally in the escalation caption
 
 Changed the review-requested headline to “Sally's concern starts an escalation.” at the user's request. Shared main/demo caption; supporting text, footage, timing and music unchanged. Lint/TypeScript pass.
+
+## Remove duplicated charge-nurse header
+
+Dashboard header suppresses the role suffix when it matches the displayed account name, removing “Charge nurse · Charge nurse.” Recorded fresh offline charge footage and verified header screenshot; capture has zero page errors or unexpected API calls. Added --charge-only capture option to preserve nurse footage and manifest. Updated source trim495→507 to match the new popup timing; scene durations and music unchanged. Dashboard build and Remotion lint/TypeScript pass. Dashboard fix committed separately with unrelated user workflow edits preserved.

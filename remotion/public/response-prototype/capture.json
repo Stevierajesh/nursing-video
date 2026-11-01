@@ -11,11 +11,11 @@
     "video": "response-prototype/nurse.webm"
   },
   "charge": {
-    "popup": 16.895,
-    "acknowledge": 19.938,
-    "acknowledged": 20.937,
-    "queue": 22.523,
-    "end": 1793485110456,
+    "popup": 17.28,
+    "acknowledge": 20.318,
+    "acknowledged": 21.341,
+    "queue": 22.929,
+    "end": 1793556132085,
     "video": "response-prototype/charge.webm"
   },
   "errors": [],
