@@ -1,0 +1,16 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "nurse": {},
+  "charge": {},
+  "chargeApp": {
+    "opened": 0.598,
+    "noteFocus": 1.499,
+    "typing": 2.53,
+    "typed": 4.468,
+    "assess": 6.33,
+    "recorded": 7.336
+  },
+  "errors": [],
+  "unexpected": []
+}

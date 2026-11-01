@@ -1,5 +1,25 @@
 # Response-flow rehearsal
 
+Current trial branch `assessment-response-story` adds a completed first assessment
+and recorded monitoring plan before the time-lapse. `main` preserves the prior
+acknowledgment-only edit. Main trial:4706frames /156.87s; response preview:1085frames.
+
+After generating the baseline fixture, record the additional charge assessment:
+
+```sh
+node tools/capture-assessment.mjs
+```
+
+It uses the real nurse app under the charge role, with browser-scoped API fixtures.
+The assessment endpoint runs through the backend's in-memory harness when the
+fixture is generated. The note is stored in resolution_note and status becomes
+assessed. All actions remain demo-only. Source: `public/assessment/charge.webm`.
+For the follow-up capture use `--reassessment --after-assessment`; it retains the
+completed review as history and creates a new open review for the changed findings.
+The trial removes the overdue-response/physician-pool sequence and introduces
+the existing medication review as a separate demo request. Earlier instructions
+and baseline durations below describe the prior edit.
+
 The `ResponseFlow-Prototype` composition is a separate audition of the new
 concern → yellow review → charge notification → acknowledgment flow. As of
 2026-10-31 it is also used by `SalusDemo` and `Act4-FirstAssessment`. In the main

@@ -65,7 +65,7 @@ const RecoveryTrends: React.FC = () => (
 
 const CareLoop: React.FC = () => {
   const frame = useCurrentFrame();
-  const steps = ["Worry recorded", "Vitals changed", "Concern escalated", "Physician reviewed", "Decision recorded"];
+  const steps = ["Concern raised", "Assessment recorded", "Changes detected", "Physician reviewed", "Decision recorded"];
   const completed = interpolate(frame, [12, 92], [0, 4], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
     <Scene dur={150} center>

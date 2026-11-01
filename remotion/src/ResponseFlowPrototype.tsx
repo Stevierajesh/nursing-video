@@ -8,8 +8,9 @@ const BASELINE_HOLD_FRAMES = 90;
 const ENTRY_FRAMES = 350 + BASELINE_HOLD_FRAMES;
 const RESULT_FRAMES = 135;
 const NOTIFICATION_FRAMES = 180;
-const QUEUE_FRAMES = 120;
-export const RESPONSE_PROTOTYPE_FRAMES = ENTRY_FRAMES + RESULT_FRAMES + NOTIFICATION_FRAMES + QUEUE_FRAMES;
+const ASSESSMENT_FRAMES = 240;
+const RECORDED_FRAMES = 90;
+export const RESPONSE_PROTOTYPE_FRAMES = ENTRY_FRAMES + RESULT_FRAMES + NOTIFICATION_FRAMES + ASSESSMENT_FRAMES + RECORDED_FRAMES;
 
 type Pose = { x: number; y: number; zoom: number };
 type CameraKey = Pose & { frame: number };
@@ -105,12 +106,22 @@ const ChargeNotification: React.FC = () => (
   </AbsoluteFill>
 );
 
-const AssessmentPending: React.FC = () => (
+const ASSESSED_POSE: Pose = { x: 1060, y: 185, zoom: 1.9 };
+const PatientAssessment: React.FC = () => (
   <AbsoluteFill>
-    <Device keys={[{ frame: 0, ...QUEUE_POSE }, { frame: QUEUE_FRAMES, ...QUEUE_POSE }]}>
-      <OffthreadVideo src={staticFile("response-prototype/charge.webm")} startFrom={690} muted style={{ width: "100%", height: "100%" }} />
+    <Device keys={[{ frame: 0, x: 1080, y: 265, zoom: 1.9 }, { frame: 190, x: 1080, y: 265, zoom: 1.9 }, { frame: ASSESSMENT_FRAMES, ...ASSESSED_POSE }]}>
+      <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={36} muted style={{ width: "100%", height: "100%" }} />
     </Device>
-    <Caption label="Response tracked" title={<>Concern<br />acknowledged.</>}>Patient assessment still pending.</Caption>
+    <Caption label="Charge-nurse assessment" title={<>An assessment.<br />A recorded plan.</>} />
+  </AbsoluteFill>
+);
+
+const AssessmentRecorded: React.FC = () => (
+  <AbsoluteFill>
+    <Device keys={[{ frame: 0, ...ASSESSED_POSE }, { frame: RECORDED_FRAMES, ...ASSESSED_POSE }]}>
+      <OffthreadVideo src={staticFile("assessment/charge.webm")} startFrom={279} muted style={{ width: "100%", height: "100%" }} />
+    </Device>
+    <Caption label="Response recorded" title={<>Assessment<br />recorded.</>}>Monitoring continues.</Caption>
   </AbsoluteFill>
 );
 
@@ -128,7 +139,8 @@ export const ResponseFlowPrototype: React.FC<{ withMusic?: boolean; slideIn?: bo
       <Series.Sequence name="Record the concern" durationInFrames={ENTRY_FRAMES}><ConcernEntry /></Series.Sequence>
       <Series.Sequence name="Yellow review confirmation" durationInFrames={RESULT_FRAMES}><ReviewRequested /></Series.Sequence>
       <Series.Sequence name="Charge-nurse notification and acknowledgment" durationInFrames={NOTIFICATION_FRAMES}><ChargeNotification /></Series.Sequence>
-      <Series.Sequence name="Acknowledged, assessment still pending" durationInFrames={QUEUE_FRAMES}><AssessmentPending /></Series.Sequence>
+      <Series.Sequence name="Record assessment and monitoring plan" durationInFrames={ASSESSMENT_FRAMES}><PatientAssessment /></Series.Sequence>
+      <Series.Sequence name="Assessment completed, monitoring continues" durationInFrames={RECORDED_FRAMES}><AssessmentRecorded /></Series.Sequence>
     </Series>
     <div style={{ position: "absolute", zIndex: 10, bottom: 25, left: 80, right: 80, textAlign: "right",
       fontFamily: C.sans, fontSize: 22, color: C.muted }}>

@@ -25,9 +25,10 @@ function cursor() {
 }
 
 async function makePage(role, port) {
+  manifest[role] ??= {};
   const ctx=await browser.newContext({viewport:{width:1366,height:1024},deviceScaleFactor:1,colorScheme:'light',recordVideo:{dir:out,size:{width:1366,height:1024}},serviceWorkers:'block'});
   contexts.push(ctx);
-  const env = readFileSync(root+`../${role==='nurse'?'nursing-app':'nursing-dashboard'}/.env.local`,'utf8');
+  const env = readFileSync(root+`../${port===5173?'nursing-app':'nursing-dashboard'}/.env.local`,'utf8');
   const url = env.match(/^VITE_SUPABASE_URL\s*=\s*["']?([^\s"']+)/m)?.[1];
   if(!url)throw Error('Supabase URL configuration missing');
   const key=`sb-${new URL(url).hostname.split('.')[0]}-auth-token`;
@@ -40,10 +41,10 @@ async function makePage(role, port) {
   await ctx.route('**/api/v1/**',async route=>{
     const req=route.request(), path=new URL(req.url()).pathname, method=req.method();
     let body;
-    const review=phase==='initial'?null:phase==='acknowledged'?fixture.acknowledged:fixture.review;
+    const review=phase==='initial'?null:phase==='assessed'?fixture.assessed:phase==='acknowledged'?fixture.acknowledged:fixture.review;
     const signal=phase==='initial'?null:fixture.submitted.worry_signal;
     const risk=phase==='initial'?fixture.initialRisk:{...fixture.submitted.risk,worry_level:4,inputs:{}};
-    const patient={...fixture.patient,risk_score:risk.score,risk_components:{worry:risk.worry_component,vitals:risk.vitals_component,trend:risk.trend_component},risk_inputs:{},latest_vitals:fixture.vitals.at(-1),latest_news:0,news_band:'none',news_alert:{score:0,band:'none',single_red_parameters:[]},latest_worry:signal,open_escalation:review,escalation_rule_label:review?.rule_label??null,escalation_reaches_physician:false};
+    const patient={...fixture.patient,risk_score:risk.score,risk_components:{worry:risk.worry_component,vitals:risk.vitals_component,trend:risk.trend_component},risk_inputs:{},latest_vitals:fixture.vitals.at(-1),latest_news:0,news_band:'none',news_alert:{score:0,band:'none',single_red_parameters:[]},latest_worry:signal,open_escalation:phase==='assessed'?null:review,escalation_rule_label:review?.rule_label??null,escalation_reaches_physician:false};
     if(method==='OPTIONS')return route.fulfill({status:204,headers:{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'*','Access-Control-Allow-Methods':'GET,POST,OPTIONS'}});
     if(method==='GET'&&path==='/api/v1/me') body={user:{id:user.id,email:user.email,full_name:role==='nurse'?'Sally Osborn':'Charge nurse',role:role==='nurse'?'nurse':'charge_nurse',unit_id:'u1',is_org_wide:role!=='nurse'},organization:{id:'a',name:'Mercy General · Demo',slug:'demo',worry_sla_minutes:20},unit:{id:'u1',name:'6 North Telemetry'}};
     else if(method==='GET'&&(path==='/api/v1/patients/mine'||path==='/api/v1/dashboard/patients'))body={patients:[patient]};
@@ -56,6 +57,9 @@ async function makePage(role, port) {
       phase='submitted';body=fixture.submitted;
     }else if(method==='POST'&&path==='/api/v1/escalations/demo-review/acknowledge'){
       phase='acknowledged';body={escalation:fixture.acknowledged};
+    }else if(method==='POST'&&path==='/api/v1/escalations/demo-review/assess'){
+      if(req.postDataJSON().note!==fixture.assessmentNote)throw Error('Unexpected assessment note');
+      phase='assessed';body={escalation:fixture.assessed};
     }else {unexpected.push({method,path});return route.fulfill({status:501,json:{error:'Unimplemented rehearsal request'}});}
     await route.fulfill({status:method==='POST'&&path==='/api/v1/worry'?201:200,headers:{'Access-Control-Allow-Origin':'*'},json:body});
   });
@@ -72,7 +76,7 @@ async function makePage(role, port) {
     for(let i=1;i<=24;i++){px=ox+(tx-ox)*i/24;py=oy+(ty-oy)*i/24;await page.mouse.move(px,py);await page.evaluate(([x,y])=>window.__cursor(x,y),[px,py]);await page.waitForTimeout(18);}
     await page.evaluate(([x,y])=>window.__cursor(x,y,true),[px,py]);await loc.click();await page.waitForTimeout(120);await page.evaluate(([x,y])=>window.__cursor(x,y),[px,py]);
   };
-  await page.goto(`http://localhost:${port}/${role==='nurse'?'worry/p1':''}`);
+  await page.goto(`http://localhost:${port}/${role==='nurse'?'worry/p1':role==='chargeApp'?'respond/p1':''}`);
   return {page,ctx,mark,tap};
 }
 

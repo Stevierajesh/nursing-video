@@ -21,7 +21,7 @@ export const BAR = (240 / 119) * FPS;          // 60.504 frames
    (The webm is 25fps; that does not enter into it.) */
 const bars = (n: number) => Math.round(n * BAR);
 export const ACT5_FRAMES = 360;
-export const ACT7_FRAMES = 570;
+export const ACT7_FRAMES = 150;
 export const ACT8_FRAMES = 783;
 
 const C = {
@@ -98,7 +98,7 @@ const SEGS: Seg[] = [
     ],
     cards: [], // Act 6 has independently timed overlays below.
   },
-  // Act 7 owns its escalation, physician-queue and map shots below.
+  // Act 7 owns the review bridge below; this entry supplies shared timing.
   {
     src: "act7-map.webm", at: 0, to: 0, len: 0, durationFrames: ACT7_FRAMES,
     keys: [], cards: [],
@@ -273,10 +273,10 @@ const ReassessmentFootage: React.FC = () => {
         backend-generated verdict. Preserve the enclosing camera and timing. */}
     <Series>
       <Series.Sequence name="Concern, breathing change and updated note" durationInFrames={388} layout="none">
-        <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={318 / 388} muted style={{ width: "100%", height: "100%" }} />
+        <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={363 / 388} muted style={{ width: "100%", height: "100%" }} />
       </Series.Sequence>
       <Series.Sequence name="Hold the current review result" durationInFrames={150} layout="none">
-        <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={330} muted style={{ width: "100%", height: "100%" }} />
+        <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={375} muted style={{ width: "100%", height: "100%" }} />
       </Series.Sequence>
     </Series>
     <Sequence name="Blend the time-lapse into the reassessment recording" durationInFrames={20} layout="none">
@@ -317,64 +317,25 @@ export const Act5Watch: React.FC = () => (
     </Sequence>
     <AbsoluteFill style={{ left: 1060, background: "linear-gradient(90deg, transparent 0px, #f3f6f8 65px)" }} />
     <Sequence name="The calm chart" durationInFrames={60}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Assessment pending", head: "Salus keeps\nwatching.",
-        sub: "The concern is acknowledged. Patient assessment is still pending." }} />
+      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Assessment recorded", head: "A plan to\nkeep watching.",
+        sub: "Reassess if observations change." }} />
     </Sequence>
     <Sequence name="Ten minutes of change, compressed" from={60} durationInFrames={210}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, head: "Heart rate up.\nBreathing faster.\nPressure falling." }} />
+      <CopyBlock clearBackground c={{ at: 0, len: 0, head: "Her concern\nprompted a review.", sub: "Salus kept watching." }} />
     </Sequence>
     <Sequence name="The risk update is visible in Salus" from={270} durationInFrames={90}>
-      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "In-app risk update", head: "5 out of 10.",
-        sub: "His observations have changed. The review remains open, with assessment pending." }} />
+      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "New observations", head: "New changes.\nTime to reassess." }} />
     </Sequence>
     <WatchClock />
   </AbsoluteFill>
 );
 
 export const Act7Escalation: React.FC = () => (
-  <AbsoluteFill style={{ background: C.canvas }}>
-    <Sequence name="Act 7: Concern heard, assessment pending" durationInFrames={90}>
-      <Scene dur={90} center>
-        <Eyebrow>3 · Escalate</Eyebrow>
-        <Head size={88}>The concern was heard.</Head>
-        <Sub>The patient still needs assessment.</Sub>
-      </Scene>
-    </Sequence>
-    <Sequence name="Act 7: Actual overdue escalation" from={90} durationInFrames={135}>
-      <SegView s={{
-        src: "act7-escalation.webm", at: 4.6, to: 9.1, len: 0, dur: 135,
-        keys: [{ t: 0, cam: focus(1070, 250, 2.00) }, { t: 1, cam: focus(1070, 250, 2.10) }], cards: [],
-      }} />
-      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Response overdue", head: "The concern\nstays visible.",
-        sub: "Past the response window, an unanswered escalation reaches the physician queue." }} />
-    </Sequence>
-    <Sequence name="Act 7: Sally's concern in the real physician queue" from={225} durationInFrames={180}>
-      <AbsoluteFill style={{ clipPath: "inset(342px 80px 340px 80px round 28px)" }}>
-      <SegView s={{
-        src: "act7-physician.webm", at: 4.0, to: 10.0, len: 0, dur: 180,
-        keys: [{ t: 0, cam: focus(803, 820, 2.00, 960) }, { t: 1, cam: focus(803, 820, 2.10, 960) }], cards: [],
-      }} />
-      </AbsoluteFill>
-      <div style={{ position: "absolute", top: 100, left: 130, right: 130,
-        background: C.canvas, padding: "24px 30px", textAlign: "center" }}>
-        <Eyebrow>Physician queue · Room 609</Eyebrow>
-        <div style={{ marginTop: 22 }}><Head size={60}>Her concern reaches the physician.</Head></div>
-      </div>
-    </Sequence>
-    <Sequence name="Act 7: Find Timmy in Room 609" from={405} durationInFrames={165}>
-      <SegView s={{
-        // Same recording as Act 6, preserving the 6/10 result in the map.
-        src: "act6-reassessment.webm", at: 62.2, to: 67.7, len: 0, dur: 165,
-        keys: [
-          { t: 0, cam: focus(430, 450, 0.95) },
-          { t: 0.55, cam: focus(160, 260, 2.30) },
-          { t: 1, cam: focus(160, 260, 2.30) },
-        ], cards: [],
-      }} />
-      <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "6 North Telemetry", head: "Room 609.\nBed 9B.",
-        sub: "The red bed on the unit map shows where the team needs to respond." }} />
-    </Sequence>
-  </AbsoluteFill>
+  <Scene dur={ACT7_FRAMES} center>
+    <Eyebrow>3 · Review</Eyebrow>
+    <Head size={88}>New findings.<br />A fresh review.</Head>
+    <Sub>Next: a physician reviews<br />the demo medication request.</Sub>
+  </Scene>
 );
 
 const REVIEW_SECTIONS = [
@@ -490,7 +451,7 @@ export const MyComposition: React.FC = () => (
     <Sequence name="Meet Timmy Buttons" from={OPENING_FRAMES} durationInFrames={PATIENT_INTRO_FRAMES}><PatientIntro /></Sequence>
     <Sequence name="Act 5: Salus watches" from={ACT5_START} durationInFrames={ACT5_FRAMES}><Act5Watch /></Sequence>
     {TAKES_T.map((s, i) => (
-      <Sequence key={`t${i}`} name={i === 0 ? "First assessment and charge-nurse response" : i === 1 ? "Second assessment: updated observations" : "Act 7: Escalation and Room 609"} from={s.start} durationInFrames={s.dur}>
+      <Sequence key={`t${i}`} name={i === 0 ? "First assessment and charge-nurse response" : i === 1 ? "Second assessment: updated observations" : "Act 7: Fresh review"} from={s.start} durationInFrames={s.dur}>
         {i === 0 ? <FirstAssessmentPreview slideIn /> : i === 1 ? <SecondAssessmentPreview /> : <Act7Escalation />}
       </Sequence>
     ))}

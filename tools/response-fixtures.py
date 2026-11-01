@@ -29,6 +29,10 @@ if baseline_motion and existing_baseline.exists():
     now = datetime.fromisoformat(json.loads(existing_baseline.read_text())["generatedAt"])
 stamp = now.isoformat()
 reassessment = "--reassessment" in sys.argv
+after_assessment = "--after-assessment" in sys.argv
+if reassessment and after_assessment and existing_baseline.exists():
+    now = datetime.fromisoformat(json.loads(existing_baseline.read_text())["generatedAt"]) + timedelta(minutes=10)
+    stamp = now.isoformat()
 note = "In my experience, I have seen that swelling of the feet while cramping is a symptom of circulatory decline."
 initial_note = note
 if reassessment:
@@ -46,12 +50,13 @@ def rpc(database, name, params):
     # The SQL RPC's storage boundary is mocked, just as in the backend tests.
     # The real API, risk calculation, trigger selection and acknowledgment run.
     assert name == "open_patient_escalation"
-    if database.rows["escalations"]:
-        review = database.rows["escalations"][0]
+    active = [row for row in database.rows["escalations"] if row["status"] in ("open", "acknowledged", "auto_escalated")]
+    if active:
+        review = active[0]
         if review["rule"] == "nurse_concern" and params["p_rule"] != "nurse_concern":
             review["rule"] = params["p_rule"]
         return SimpleNamespace(execute=lambda: SimpleNamespace(data=deepcopy(review)))
-    review = dict(id="demo-review", org_id=params["p_org"], patient_id=params["p_patient"],
+    review = dict(id="demo-review-followup" if database.rows["escalations"] else "demo-review", org_id=params["p_org"], patient_id=params["p_patient"],
                   worry_signal_id=params["p_signal"], rule=params["p_rule"], status="open",
                   concern_review=True, triggered_at=stamp,
                   sla_deadline=(now + timedelta(minutes=params["p_sla_minutes"])).isoformat(),
@@ -110,6 +115,10 @@ with patch.object(Query, "execute", execute), patch.object(DB, "rpc", rpc), \
                 acknowledged_at=(now-timedelta(minutes=9)).isoformat(),
                 acknowledged_by="charge-demo", assessed_at=None)
             database.rows["escalations"] = [deepcopy(initial_review)]
+            if after_assessment:
+                initial_review.update(status="assessed", assessed_at=(now-timedelta(minutes=8)).isoformat(),
+                    assessed_by="charge-demo", resolution_note="Demo assessment completed. Continue monitoring; reassess if observations change.")
+                database.rows["escalations"] = [deepcopy(initial_review)]
             database.rows["worry_signals"] = [dict(id="initial-worry", patient_id="p1", org_id="a",
                 nurse_id="n1", level=4, reasons=[], note=initial_note,
                 created_at=(now-timedelta(minutes=10)).isoformat(),
@@ -127,10 +136,10 @@ with patch.object(Query, "execute", execute), patch.object(DB, "rpc", rpc), \
         review = {**submitted["escalation"], "rule_label": RULE_LABELS[submitted["escalation"]["rule"]],
                   "patient": {k: patient[k] for k in ["id", "display_name", "room"]},
                   "worry_signal": signal, "ack_by": None, "assess_by": None}
-        if reassessment:
+        if reassessment and not after_assessment:
             review["worry_signal"] = database.rows["worry_signals"][0]
         identity.update(id="charge-demo", role="charge_nurse")
-        response = client.post("/api/v1/escalations/demo-review/acknowledge", json={})
+        response = client.post(f"/api/v1/escalations/{review['id']}/acknowledge", json={})
         assert response.status_code == 200, response.get_json()
         acknowledged = {**review, **response.get_json()["escalation"],
                         "ack_by": {"id": "charge-demo", "full_name": "Charge nurse"}}
@@ -142,6 +151,14 @@ with patch.object(Query, "execute", execute), patch.object(DB, "rpc", rpc), \
                        generatedAt=stamp, patient=patient, vitals=vitals,
                        initialRisk=initial_risk, submitted=submitted, review=review,
                        acknowledged=acknowledged, note=note)
+        if not reassessment:
+            assessment_note = "Assessment completed in the demo scenario. Continue monitoring observations; reassess if symptoms or readings change."
+            response = client.post(f"/api/v1/escalations/{review['id']}/assess", json={"note": assessment_note})
+            assert response.status_code == 200, response.get_json()
+            assessed = {**acknowledged, **response.get_json()["escalation"],
+                        "assess_by": {"id":"charge-demo", "full_name":"Charge nurse"}}
+            assert assessed["status"] == "assessed" and assessed["resolution_note"] == assessment_note
+            payload.update(assessed=assessed, assessmentNote=assessment_note)
         if baseline_motion:
             payload["illustrativeBaselineHistory"] = True
         if reassessment:
@@ -153,7 +170,8 @@ with patch.object(Query, "execute", execute), patch.object(DB, "rpc", rpc), \
         out = ROOT / ("remotion/public/reassessment/fixtures.json" if reassessment else "remotion/public/response-prototype/fixtures.json")
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(payload, indent=2))
-        print("Offline reassessment verified: updated note, NEWS 8, combined score 55, existing acknowledged review retained." if reassessment
-              else "Offline API verified: Very worried → yellow review → acknowledged, assessment pending.")
+        print(("Offline reassessment verified: previous review assessed; fresh concern creates a new review, NEWS 8, score 55."
+               if after_assessment else "Offline reassessment verified: updated note, NEWS 8, combined score 55, existing acknowledged review retained.")
+              if reassessment else "Offline API verified: concern → acknowledgment → assessment with recorded monitoring plan.")
     finally:
         harness.close()

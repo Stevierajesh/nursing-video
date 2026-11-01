@@ -2,14 +2,14 @@
   "browserOnly": true,
   "noLiveWrites": true,
   "nurse": {
-    "baseline": 0.475,
-    "selection": 1.977,
-    "reason": 3.014,
-    "noteFocus": 4.006,
-    "typing": 5.002,
-    "typed": 6.323,
-    "submit": 8.381,
-    "result": 9.37
+    "baseline": 0.591,
+    "selection": 2.093,
+    "reason": 3.108,
+    "noteFocus": 4.116,
+    "typing": 5.11,
+    "typed": 6.398,
+    "submit": 8.475,
+    "result": 10.658
   },
   "charge": {},
   "errors": [],

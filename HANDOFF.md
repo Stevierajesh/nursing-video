@@ -2,6 +2,29 @@
 
 ## Current status
 
+**Latest trial: assessment before monitoring (2026-11-01).** Working branch is
+`assessment-response-story`; `main` preserves the previous acknowledged/pending
+edit. Preview the trial at http://localhost:3000/SalusDemo. The charge nurse now
+records an assessment and demo monitoring plan before the time-lapse. New source
+`assessment/charge.webm` films the actual assessment-note field and Mark assessed
+action in the nurse app under the charge role. Backend-generated offline fixture
+confirms status=assessed and the plan stored in resolution_note. No live writes.
+
+Monitoring copy is now “Her concern prompted a review. Salus kept watching.”,
+and the replay status is “Assessment recorded · monitoring continues”. Later
+reassessment starts after the first review is assessed and creates a separate
+new open review. New take uses the same note and score6, with timestamps aligned
+to the demo's5:11PM clock. The old overdue/physician-pool/map Act7 is removed from
+this trial, replaced by a5-second “New findings. A fresh review.” bridge into
+the explicitly separate demo medication request. Care recap now includes
+Assessment recorded. No claim that review prevented deterioration or that an
+objective-only escalation automatically reached a physician.
+
+Trial main:4706frames /156.87s; first response1085frames /36.17s; Act7:150frames.
+Opening/logo cue and main music placement unchanged. Below notes of earlier
+acknowledgment-only revisions are historical; this block and the timeline table
+describe the current branch. Current baseline `main` is still4916frames.
+
 Act 7 opening now reads “The concern was heard.” / “The patient still needs
 assessment.” in place of “Now the nurse and the vitals agree.” / “Human concern.
 Objective change.” Same 90-frame scene and styling; main and standalone Act7
@@ -129,14 +152,14 @@ The full film was rendered and delivered. On 2026-10-30, two opening copy change
 | Act 1 evidence | 480 | 251 |
 | Act 2 bridge, question, brand | 731 | 375 |
 | Meet Timmy | 1106 | 225, overlapping next section by 36 |
-| First assessment + charge response | 1295 | 875 |
-| Act 5 watch/time-lapse | 2170 | 360 |
-| Act 6 reassessment | 2530 | 538 |
-| Act 7 escalation | 3068 | 570 |
-| Act 8 physician review | 3638 | 783 |
-| Act 9 recovery/recap | 4421 | 360 |
-| Outro | 4781 | 135 |
-| End | 4916 | |
+| First concern + charge assessment | 1295 | 1085 |
+| Act 5 watch/time-lapse | 2380 | 360 |
+| Act 6 reassessment | 2740 | 538 |
+| Act 7 fresh review bridge | 3278 | 150 |
+| Act 8 physician review | 3428 | 783 |
+| Act 9 recovery/recap | 4211 | 360 |
+| Outro | 4571 | 135 |
+| End | 4706 | |
 
 Timing is derived from shared source constants; update those rather than duplicating absolute offsets when editing.
 
