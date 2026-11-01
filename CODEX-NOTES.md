@@ -483,3 +483,7 @@ User approved: “Reviewed Timmy at bedside following Sally’s concern. Repeat 
 ## Keep vital trend histories continuous
 
 User flagged the time-lapse charts looking newly started. Replaced the short growing paths with full-width rolling histories from the first frame. A fixed65-point mesh samples the existing illustrative series in a moving history window; baseline stays visible while new observations enter at the right edge. The latest-reading marker stays at the right, and line geometry changes continuously rather than extending from a short stub. Preserves recorded endpoint values, original final trend shape, scales, labels, timing and music. Shared main, watch preview and reassessment handoff freeze. Lint/TypeScript pass; start and final trend frames visually checked in remotion/out/full-history-start.png and full-history-end.png.
+
+## Zoom closer to the charge notification
+
+User requested a tighter notification close-up. Changed the settled notification camera from1.5x at683/180 to2.7x at683/100, keeping the complete toast and Open patient button visible. Same smooth keyframe timing and continuous source; assessment camera, captions, runtime and music unchanged. Lint/TypeScript pass; main2045 visually checked at remotion/out/notification-closeup.png.

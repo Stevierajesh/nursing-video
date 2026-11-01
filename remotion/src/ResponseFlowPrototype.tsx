@@ -128,8 +128,8 @@ const ChargeResponseFlow: React.FC = () => {
       <Device keys={[
         { frame: 0, ...MAP_HANDOFF_POSE },
         { frame: HANDOFF_FRAMES, ...MAP_HANDOFF_POSE },
-        { frame: 80, x: 683, y: 180, zoom: 1.5 },
-        { frame: 175, x: 683, y: 180, zoom: 1.5 },
+        { frame: 80, x: 683, y: 100, zoom: 2.7 },
+        { frame: 175, x: 683, y: 100, zoom: 2.7 },
         { frame: 240, x: 1080, y: 265, zoom: 1.9 },
         { frame: 395, x: 1080, y: 265, zoom: 1.9 },
         { frame: 425, x: 1060, y: 185, zoom: 1.9 },
