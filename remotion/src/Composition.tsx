@@ -9,7 +9,7 @@ import {
 } from "./TypeActs";
 import { PatientIntro, PATIENT_INTRO_FRAMES, PATIENT_SLIDE_FRAMES } from "./PatientIntro";
 import { Eyebrow, Head } from "./Type";
-import { Act9Recovery, ACT9_FRAMES } from "./Act9Recovery";
+import { CareLoop, RECAP_FRAMES } from "./Act9Recovery";
 import { WatchTimeLapseScreen, WatchClock } from "./WatchTimeLapse";
 import { ResponseFlowPrototype, RESPONSE_PROTOTYPE_FRAMES } from "./ResponseFlowPrototype";
 
@@ -22,8 +22,20 @@ export const BAR = (240 / 119) * FPS;          // 60.504 frames
 const bars = (n: number) => Math.round(n * BAR);
 export const ACT5_FRAMES = 255;
 const REASSESSMENT_ENTRY_FRAMES = 388;
+/* The recording's own page load. The patient page is up at source frame 66,
+   which is where the old 388-frame entry had reached by frame 58 anyway, so
+   skipping the spinner leaves every later action on its original frame. */
+const REASSESSMENT_LOADED_AT = 66;
+const REASSESSMENT_LOAD_FRAMES = 58;
+/* The copy column swaps to the ledger here, a few frames before the camera
+   finishes its move onto the result at 380. */
+const REASSESSMENT_RESULT_AT = 374;
 const REASSESSMENT_FRAMES = REASSESSMENT_ENTRY_FRAMES + 150;
-export const ACT7_FRAMES = 210;
+/* Act 7 ends once the detail page has settled. The recording keeps sitting on
+   that page for another two seconds; holding it on screen read as a repeat of
+   the first response take rather than a new beat. */
+export const ACT7_FRAMES = 165;
+const ACT7_ARRIVAL_FRAMES = 90;
 export const ACT8_FRAMES = 783;
 
 const C = {
@@ -56,7 +68,10 @@ void WHOLE;
 // One shared pose across the Act 5/6 boundary, then pan to the worry controls.
 const REASSESSMENT_HANDOFF = focus(350, 440, 1.65);
 
-type Key = { t: number; cam: Cam };
+/* `linear` makes the leg STARTING at this key run at constant speed. The
+   default bezier eases out into every key, which parks the camera at a segment
+   boundary; across the Act 5 handoff that stall is what announced the cut. */
+type Key = { t: number; cam: Cam; linear?: boolean };
 type Card = { at: number; len: number; eyebrow?: string; head?: string; sub?: string };
 type Seg = { src: string; at: number; to: number; len: number; durationFrames?: number; keys: Key[]; cards: Card[] };
 
@@ -87,22 +102,30 @@ const SEGS: Seg[] = [
   {
     src: "reassessment/nurse.webm", at: 0.4, to: 16, len: 0, durationFrames: REASSESSMENT_FRAMES,
     keys: [
-      { t: 0.00, cam: REASSESSMENT_HANDOFF },
+      /* Arrive on the Act 5 pose already in motion and keep going. The camera
+         never stops at the boundary, so the take carries through instead of
+         reading as a cut to another scene. */
+      { t: 0.00, cam: REASSESSMENT_HANDOFF, linear: true },
       { t: 60 / REASSESSMENT_FRAMES, cam: focus(980, 200, 1.30) },
       { t: 86 / REASSESSMENT_FRAMES, cam: focus(1050, 250, 1.50) },
       { t: 149 / REASSESSMENT_FRAMES, cam: focus(1000, 360, 1.65) },
       { t: 201 / REASSESSMENT_FRAMES, cam: focus(1000, 515, 2.40, 570) },
-      { t: 310 / REASSESSMENT_FRAMES, cam: focus(1000, 515, 2.40, 570) },
-      { t: 348 / REASSESSMENT_FRAMES, cam: focus(1000, 618, 1.50) },
-      { t: 372 / REASSESSMENT_FRAMES, cam: focus(1000, 618, 1.50) },
-      { t: 412 / REASSESSMENT_FRAMES, cam: focus(430, 450, 1.30) },
-      { t: 1.00, cam: focus(430, 450, 1.30) },
+      /* Hold the note field through the submit: the button reads "Sending…" at
+         frame 320 and the result page is up by 321. */
+      { t: 322 / REASSESSMENT_FRAMES, cam: focus(1000, 515, 2.40, 570) },
+      /* Then one move straight onto the recorded result — the escalation
+         banners, the contributions card and the button, at roughly x 60–795,
+         y 90–615 of the source. Previously this pulled out to 1.50, held, panned
+         up and left, then pushed back in to 2.10: three moves to reach a frame
+         it can reach directly, and the result sat unframed for five seconds. */
+      { t: 380 / REASSESSMENT_FRAMES, cam: focus(427, 352, 2.10, 630) },
+      { t: 1.00, cam: focus(427, 352, 2.18, 630) },
     ],
     cards: [], // Act 6 has independently timed overlays below.
   },
   // Act 7 owns the fresh-review footage below; this entry supplies shared timing.
   {
-    src: "team-review/nurse.webm", at: 1.2, to: 8.2, len: 0, durationFrames: ACT7_FRAMES,
+    src: "team-review/nurse.webm", at: 1.2, to: 6.7, len: 0, durationFrames: ACT7_FRAMES,
     keys: [], cards: [],
   },
 ];
@@ -114,7 +137,13 @@ const FOOTAGE_START = OPENING_FRAMES + PATIENT_INTRO_FRAMES - PATIENT_SLIDE_FRAM
 const ACT5_START = FOOTAGE_START + TIMED[0].dur;
 const TAKES_T = TIMED.map((x, i) => ({ ...x, start: x.start + FOOTAGE_START + (i > 0 ? ACT5_FRAMES : 0) }));
 const ACT9_START = FOOTAGE_START + cur + ACT5_FRAMES;
-export const TOTAL = ACT9_START + ACT9_FRAMES + OUTRO_FRAMES;
+/* The illustrative beat is the same ward map cooling down rather than abstract
+   cards, so the conclusion stays in the world the story has been living in. */
+export const MAP_RECOVERY_FRAMES = 120;
+/* The second level, cut in between the red and the cooling: the room can only
+   start improving once somebody comes, so the page has to land first. */
+export const PHYSICIAN_FRAMES = 150;
+export const TOTAL = ACT9_START + PHYSICIAN_FRAMES + MAP_RECOVERY_FRAMES + RECAP_FRAMES + OUTRO_FRAMES;
 export const FIRST_ASSESSMENT_FRAMES = TIMED[0].dur;
 export const SECOND_ASSESSMENT_FRAMES = TIMED[1].dur;
 
@@ -134,7 +163,8 @@ function camAt(keys: Key[], t: number): Cam {
   for (let i = 0; i < keys.length - 1; i++) {
     const a = keys[i], b = keys[i + 1];
     if (t >= a.t && t <= b.t) {
-      const u = e((t - a.t) / (b.t - a.t || 1));
+      const p = (t - a.t) / (b.t - a.t || 1);
+      const u = a.linear ? p : e(p);
       return {
         x: a.cam.x + (b.cam.x - a.cam.x) * u,
         y: a.cam.y + (b.cam.y - a.cam.y) * u,
@@ -228,34 +258,47 @@ export const FirstAssessmentPreview: React.FC<{ slideIn?: boolean }> = ({ slideI
   <ResponseFlowPrototype withMusic={false} slideIn={slideIn} />
 );
 
-const Contribution: React.FC<{ label: string; value: number; delay: number }> = ({ label, value, delay }) => {
-  const frame = useCurrentFrame();
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 24px", fontFamily: C.sans, fontSize: 25, color: C.muted }}>
-      <span>{label}</span><span style={{ color: C.ink, fontVariantNumeric: "tabular-nums" }}>+{value.toFixed(1)}</span>
-      <div style={{ gridColumn: "1 / -1", height: 5, background: "#e5e9ee", borderRadius: 5, overflow: "hidden" }}>
-        <div style={{ height: "100%", background: C.teal, width: `${interpolate(frame, [delay, delay + 18], [0, value / 3.5 * 100], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}%` }} />
-      </div>
+/* A ledger row, not a bar. The earlier bars were scaled against an unstated
+   maximum, so two visibly similar bars stood for 2.5 and 3.0 and nothing said
+   what a full bar meant. An aligned column of numerals scans down in one pass
+   and the contributions visibly sum. */
+const LedgerRow: React.FC<{ label: string; value: string; delay: number; total?: boolean }> =
+({ label, value, delay, total = false }) => (
+  <Reveal delay={delay}>
+    <div style={{
+      display: "grid", gridTemplateColumns: "1fr auto", alignItems: "baseline", gap: 24,
+      padding: "8px 0", fontFamily: C.sans, fontSize: total ? 29 : 25,
+      color: total ? C.ink : C.muted,
+    }}>
+      <span>{label}</span>
+      <span style={{ color: total ? "#c2410c" : C.ink, fontWeight: total ? 700 : 400,
+        fontVariantNumeric: "tabular-nums" }}>{value}</span>
     </div>
-  );
-};
+  </Reveal>
+);
 
 const ReassessmentResult: React.FC = () => (
   <div style={{ position: "absolute", right: 0, top: 0, width: 661, height: "100%", paddingLeft: 54, paddingRight: 86, boxSizing: "border-box",
     display: "flex", flexDirection: "column", justifyContent: "center", gap: 22,
     background: "linear-gradient(90deg, rgba(243,246,248,0) 0px, #f3f6f8 45px)",
   }}>
-    <Reveal delay={2}><div style={{ fontFamily: C.mono, fontSize: 19, letterSpacing: ".2em", color: C.teal, textTransform: "uppercase" }}>Assessment recorded</div></Reveal>
-    <Reveal delay={5}>
+    {/* A negative delay starts this already part-way through its wipe, so the
+        column is occupied on the very frame the caption leaves rather than
+        going blank for one. The later rows keep their stagger. */}
+    <Reveal delay={-2}><div style={{ fontFamily: C.mono, fontSize: 19, letterSpacing: ".2em", color: C.teal, textTransform: "uppercase" }}>Assessment recorded</div></Reveal>
+    <Reveal delay={2}>
       <div style={{ fontFamily: C.serif, fontSize: 150, lineHeight: 1, color: "#c2410c" }}>6<span style={{ fontSize: 54 }}>/10</span></div>
       <div style={{ fontFamily: C.sans, fontSize: 25, color: "#c2410c", marginTop: 16 }}>Elevated · combined risk</div>
     </Reveal>
-    <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 8 }}>
-      <Contribution label="Nurse worry" value={2.5} delay={12} />
-      <Contribution label="Current vitals" value={3.0} delay={18} />
-      <Contribution label="Vitals trend" value={0.0} delay={24} />
+    {/* Narrower than the column so the labels and their numerals stay close. */}
+    <div style={{ width: "100%", maxWidth: 430, marginTop: 4 }}>
+      <LedgerRow label="Nurse worry" value="2.5" delay={9} />
+      <LedgerRow label="Current vitals" value="3.0" delay={15} />
+      <LedgerRow label="Vitals trend" value="0.0" delay={21} />
+      <Reveal delay={27}><div style={{ height: 1, background: "#cfd7e0", margin: "10px 0" }} /></Reveal>
+      <LedgerRow label="Combined" value="5.5 → 6" delay={31} total />
     </div>
-    <Reveal delay={28}><div style={{ fontFamily: C.sans, fontSize: 23, lineHeight: 1.4, color: C.muted }}>5.5 points, rounded to 6/10.<br />Her updated observations are recorded.</div></Reveal>
+    <Reveal delay={39}><div style={{ fontFamily: C.sans, fontSize: 23, lineHeight: 1.4, color: C.muted }}>Sally’s updated observations are recorded.</div></Reveal>
   </div>
 );
 
@@ -268,23 +311,30 @@ const ReassessmentHandoffMatte: React.FC = () => {
 };
 
 const ReassessmentFootage: React.FC = () => {
-  const frame = useCurrentFrame();
   return <div style={{ position: "relative", width: "100%", height: "100%" }}>
     {/* Current app rehearsal: faster typing, a full-note hold, then the actual
-        backend-generated verdict. Preserve the enclosing camera and timing. */}
+        backend-generated verdict. Preserve the enclosing camera and timing.
+        The recording opens on a "Loading patient…" spinner over a blank page.
+        Freezing the first loaded frame for exactly the span the spinner used to
+        occupy removes it without moving any later event: the camera glides and
+        the time-lapse gives way to a real page instead of to a spinner. */}
     <Series>
-      <Series.Sequence name="Concern, breathing change and updated note" durationInFrames={REASSESSMENT_ENTRY_FRAMES} layout="none">
-        <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={12} playbackRate={363 / 388} muted style={{ width: "100%", height: "100%" }} />
+      <Series.Sequence name="Settle on the loaded patient page" durationInFrames={REASSESSMENT_LOAD_FRAMES} layout="none">
+        <Freeze frame={0}>
+          <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={REASSESSMENT_LOADED_AT} muted style={{ width: "100%", height: "100%" }} />
+        </Freeze>
+      </Series.Sequence>
+      <Series.Sequence name="Concern, breathing change and updated note" durationInFrames={REASSESSMENT_ENTRY_FRAMES - REASSESSMENT_LOAD_FRAMES} layout="none">
+        <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={REASSESSMENT_LOADED_AT}
+          playbackRate={(375 - REASSESSMENT_LOADED_AT) / (REASSESSMENT_ENTRY_FRAMES - REASSESSMENT_LOAD_FRAMES)} muted style={{ width: "100%", height: "100%" }} />
       </Series.Sequence>
       <Series.Sequence name="Hold the current review result" durationInFrames={150} layout="none">
         <OffthreadVideo src={staticFile("reassessment/nurse.webm")} startFrom={375} muted style={{ width: "100%", height: "100%" }} />
       </Series.Sequence>
     </Series>
-    <Sequence name="Blend the time-lapse into the reassessment recording" durationInFrames={20} layout="none">
-      <AbsoluteFill style={{ opacity: interpolate(frame, [0, 20], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
-        <Freeze frame={ACT5_FRAMES - 1}><WatchTimeLapseScreen /></Freeze>
-      </AbsoluteFill>
-    </Sequence>
+    {/* No transition effect across the Act 5 boundary. The time-lapse ends on
+        the very reading this recording opens with, so the camera carrying
+        straight through is enough; a dissolve here only announced a cut. */}
   </div>;
 };
 
@@ -293,10 +343,15 @@ export const SecondAssessmentPreview: React.FC = () => (
     {/* One camera move across the trimmed interaction; copy stays in place. */}
     <SegView s={{ ...TIMED[1], cards: [] }}><ReassessmentFootage /></SegView>
     <Sequence name="Continue the time-lapse framing into reassessment" durationInFrames={60}><ReassessmentHandoffMatte /></Sequence>
-    <Sequence name="Act 6: One explanation through the complete reassessment" durationInFrames={REASSESSMENT_ENTRY_FRAMES}>
+    {/* Hand the copy column over while the camera is still travelling onto the
+        result, not after it has settled. The caption used to end on the frame
+        the ledger began, and the ledger's first reveal is delayed, so the column
+        sat empty for a few frames and read as a blip. */}
+    <Sequence name="Act 6: One explanation through the complete reassessment" durationInFrames={REASSESSMENT_RESULT_AT}>
       <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Second assessment", head: "Timmy’s observations changed.\nSally raises a fresh concern." }} />
     </Sequence>
-    <Sequence name="Act 6: Recorded 6 out of 10 result" from={REASSESSMENT_ENTRY_FRAMES} durationInFrames={150}><ReassessmentResult /></Sequence>
+    <Sequence name="Act 6: Recorded 6 out of 10 result" from={REASSESSMENT_RESULT_AT}
+      durationInFrames={REASSESSMENT_FRAMES - REASSESSMENT_RESULT_AT}><ReassessmentResult /></Sequence>
     <div style={{ position: "absolute", zIndex: 10, bottom: 25, left: 80, right: 80, textAlign: "right",
       fontFamily: C.sans, fontSize: 22, color: C.muted }}>Prototype flow · browser-only rehearsal</div>
   </AbsoluteFill>
@@ -310,8 +365,10 @@ export const Act5Watch: React.FC = () => (
         keys: [
           { t: 0, cam: focus(350, 610, 1.90) },
           { t: 0.12, cam: focus(350, 610, 2.05) },
-          { t: 0.75, cam: focus(350, 610, 2.05) },
-          { t: 0.90, cam: REASSESSMENT_HANDOFF },
+          /* Leave on the move: the last leg runs linear into the handoff pose
+             and the reassessment picks it up at the same speed, so there is no
+             stall at 1:28 for the content change to show itself against. */
+          { t: 0.78, cam: focus(350, 610, 2.05), linear: true },
           { t: 1, cam: REASSESSMENT_HANDOFF },
         ], cards: [],
       }}><WatchTimeLapseScreen /></SegView>
@@ -325,21 +382,90 @@ export const Act5Watch: React.FC = () => (
   </AbsoluteFill>
 );
 
-export const Act7Escalation: React.FC = () => (
+/* One caption carries the whole map sequence — the escalation through the room
+   cooling — so it is mounted once by MyComposition and spans both scenes rather
+   than being re-revealed per scene. Standalone previews render it themselves. */
+/* Sally's words are on the prescriber's screen in the middle beat, so the
+   caption states the mechanism instead of quoting her twice. */
+export const MapCaption: React.FC = () => (
+  <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Escalation overdue", head: "The physician\nis alerted.",
+    sub: "Unanswered within the window, it escalates past the nursing tier to every prescriber on the unit." }} />
+);
+
+/* The prescriber's deterioration queue. reaches_physician() lets this through
+   because the escalation went auto_escalated — the nursing tier had its SLA
+   window and did not answer. The card says so itself: "Nursing tier did not
+   respond". No medication request exists in this story, and the approval column
+   on screen reads empty, so nothing here is a prescription. */
+export const PhysicianQueue: React.FC = () => (
   <AbsoluteFill style={{ background: C.canvas }}>
     <SegView s={{
-      src: "team-review/nurse.webm", at: 1.2, to: 8.2, len: 0, dur: ACT7_FRAMES,
+      src: "physician-queue/prescriber.webm", at: 0.8, to: 5.8, len: 0, dur: PHYSICIAN_FRAMES,
+      /* Opens on the queue's empty state — "Nothing has been escalated to a
+         physician" — then the SLA lapses and the critical notice and the row
+         arrive together on the same poll. The queue card spans x 256–1350 of
+         the source; centred in the 1259px the copy column leaves. */
       keys: [
-        { t: 0, cam: focus(820, 310, 1.45) },
-        { t: 75 / ACT7_FRAMES, cam: focus(820, 310, 1.45) },
-        { t: 145 / ACT7_FRAMES, cam: focus(760, 440, 1.35) },
-        { t: 1, cam: focus(760, 440, 1.35) },
+        { t: 0, cam: focus(803, 217, 1.42, 630) },
+        /* Hold on the empty queue until the notice lands at about frame 32,
+           then push onto it. The toast occupies x 478–890, y 14–136 of the
+           source; aiming just below its centre keeps the row with Sally's
+           words legible underneath. */
+        { t: 32 / PHYSICIAN_FRAMES, cam: focus(803, 217, 1.45, 630) },
+        { t: 1, cam: focus(690, 110, 2.25, 590) },
       ], cards: [],
     }} />
-    <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Fresh review requested", head: "The team gets\nthe updated picture.",
-      sub: "Sally: “BP falling, heart rate and breathing rising. Please assess.”" }} />
     <div style={{ position: "absolute", zIndex: 10, bottom: 25, left: 80, right: 80, textAlign: "right",
       fontFamily: C.sans, fontSize: 22, color: C.muted }}>Prototype flow · browser-only rehearsal</div>
+  </AbsoluteFill>
+);
+
+export const Act7Escalation: React.FC<{ showCaption?: boolean }> = ({ showCaption = true }) => (
+  <AbsoluteFill style={{ background: C.canvas }}>
+    {/* One continuous shot on the ward map. Room 609 carries room-risk-high: the
+        reassessment state is NEWS 8 in the high band with an open news_high
+        escalation, which is rank 3 in patientPriority. The room's own chip reads
+        "Escalation open · Combined 6/10", so the act can stay here and still say
+        the follow-up is unanswered — no cutaway to a cropped-out card. */}
+    <SegView s={{
+      src: "escalation-map/nurse.webm", at: 1.9, to: 7.4, len: 0, dur: ACT7_FRAMES,
+      keys: [
+        { t: 0, cam: focus(980, 700, 1.30, 700) },
+        { t: ACT7_ARRIVAL_FRAMES / ACT7_FRAMES, cam: focus(1100, 790, 2.35, 660) },
+        { t: 1, cam: focus(1120, 800, 2.75, 640) },
+      ], cards: [],
+    }} />
+    {showCaption && <MapCaption />}
+    <div style={{ position: "absolute", zIndex: 10, bottom: 25, left: 80, right: 80, textAlign: "right",
+      fontFamily: C.sans, fontSize: 22, color: C.muted }}>Prototype flow · browser-only rehearsal</div>
+  </AbsoluteFill>
+);
+
+/* The illustrative close. Real app behaviour — as the simulated observations
+   improve, patientPriority drops out of rank 3 and UnitFloorPlan swaps room 609
+   from room-risk-high to room-concern-pending to no highlight, and the room's
+   own chip steps 6/10 → 4/10 → "Combined score low". The clinical improvement
+   is simulated, which is what the eyebrow and the corner label say. The opening
+   pose matches the end of Act 7 so it reads as the same frame cooling. */
+export const MapRecovery: React.FC = () => (
+  <AbsoluteFill style={{ background: C.canvas }}>
+    <SegView s={{
+      /* Picks up just before the amber switch: the red was already held through
+         Act 7 and the prescriber beat, so showing it a third time stalls. */
+      src: "deescalation-map/nurse.webm", at: 3.3, to: 8.0, len: 0, dur: MAP_RECOVERY_FRAMES,
+      keys: [
+        { t: 0, cam: focus(1120, 800, 2.75, 640) },
+        { t: 1, cam: focus(1100, 790, 2.45, 660) },
+      ], cards: [],
+    }} />
+    {/* The repeat-paging line is a stated product intent, not something the
+        code does today: sweep_sla_breaches() is a single SLA deadline, not a
+        repeating page. It sits inside the beat the corner label already marks
+        as illustrative. */}
+    <CopyBlock clearBackground c={{ at: 0, len: 0, eyebrow: "Illustrative scenario", head: "The physician\ntakes action.",
+      sub: "Salus keeps paging until the escalation is acknowledged." }} />
+    <div style={{ position: "absolute", zIndex: 10, left: 90, bottom: 30, color: C.muted, fontFamily: C.mono,
+      fontSize: 18, letterSpacing: ".05em" }}>Illustrative projection · simulated values</div>
   </AbsoluteFill>
 );
 
@@ -442,7 +568,12 @@ export const TimmyIntroductionPreview: React.FC = () => (
 
 export const MyComposition: React.FC = () => (
   <AbsoluteFill style={{ background: C.canvas }}>
-    <Audio src={staticFile("b51-q2.wav")} />
+    {/* The source is 209s against a 128s film, so the track was being cut off
+        mid-phrase at full level on the last frame. Ride it down under the
+        outro instead; the music's own placement is unchanged. */}
+    <Audio src={staticFile("b51-q2.wav")} volume={(f) => interpolate(f, [TOTAL - 90, TOTAL - 1], [1, 0], {
+      extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.bezier(0.4, 0, 0.7, 1),
+    })} />
     <Sequence name="Act 0: Cold open" durationInFrames={COLD_OPEN_FRAMES}><ColdOpen /></Sequence>
     <Sequence
       name="Act 1: The gap"
@@ -457,10 +588,16 @@ export const MyComposition: React.FC = () => (
     <Sequence name="Act 5: Salus watches" from={ACT5_START} durationInFrames={ACT5_FRAMES}><Act5Watch /></Sequence>
     {TAKES_T.map((s, i) => (
       <Sequence key={`t${i}`} name={i === 0 ? "First assessment and charge-nurse response" : i === 1 ? "Second assessment: updated observations" : "Act 7: Updated concern reaches the team"} from={s.start} durationInFrames={s.dur}>
-        {i === 0 ? <FirstAssessmentPreview slideIn /> : i === 1 ? <SecondAssessmentPreview /> : <Act7Escalation />}
+        {i === 0 ? <FirstAssessmentPreview slideIn /> : i === 1 ? <SecondAssessmentPreview /> : <Act7Escalation showCaption={false} />}
       </Sequence>
     ))}
-    <Sequence name="Act 9: Simulated recovery and care journey" from={ACT9_START} durationInFrames={ACT9_FRAMES}><Act9Recovery /></Sequence>
-    <Sequence name="Act 11: Outro" from={ACT9_START + ACT9_FRAMES} durationInFrames={OUTRO_FRAMES}><Outro /></Sequence>
+    <Sequence name="Act 8: No one answered, so it goes past them" from={ACT9_START} durationInFrames={PHYSICIAN_FRAMES}><PhysicianQueue /></Sequence>
+    <Sequence name="Act 9: The room cools down" from={ACT9_START + PHYSICIAN_FRAMES} durationInFrames={MAP_RECOVERY_FRAMES}><MapRecovery /></Sequence>
+    {/* Held across the red room and the prescriber queue so it reveals once and
+        stays put; the cooling then carries its own caption. */}
+    <Sequence name="The physician is alerted" from={TAKES_T[2].start}
+      durationInFrames={ACT7_FRAMES + PHYSICIAN_FRAMES}><MapCaption /></Sequence>
+    <Sequence name="Act 9: From concern to decision" from={ACT9_START + PHYSICIAN_FRAMES + MAP_RECOVERY_FRAMES} durationInFrames={RECAP_FRAMES}><CareLoop /></Sequence>
+    <Sequence name="Act 11: Outro" from={ACT9_START + PHYSICIAN_FRAMES + MAP_RECOVERY_FRAMES + RECAP_FRAMES} durationInFrames={OUTRO_FRAMES}><Outro /></Sequence>
   </AbsoluteFill>
 );

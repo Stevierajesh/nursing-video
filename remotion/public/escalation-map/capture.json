@@ -1,0 +1,37 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "nurse": {
+    "ready": 1.774
+  },
+  "charge": {},
+  "flashStyle": {
+    "animation": "room-risk-flash",
+    "border": "3px",
+    "color": "rgb(220, 38, 38)"
+  },
+  "room": {
+    "x": 904.229248046875,
+    "y": 702.2838134765625,
+    "width": 344.4322509765625,
+    "height": 205.2239990234375
+  },
+  "alertState": {
+    "red": true,
+    "pulse": false
+  },
+  "flashFills": [
+    "rgba(220, 38, 38, 0.243)",
+    "rgba(220, 38, 38, 0.14)",
+    "rgba(220, 38, 38, 0.086)",
+    "rgba(220, 38, 38, 0.09)",
+    "rgba(220, 38, 38, 0.16)",
+    "rgba(220, 38, 38, 0.27)",
+    "rgba(220, 38, 38, 0.337)",
+    "rgba(220, 38, 38, 0.345)",
+    "rgba(220, 38, 38, 0.286)",
+    "rgba(220, 38, 38, 0.184)"
+  ],
+  "errors": [],
+  "unexpected": []
+}

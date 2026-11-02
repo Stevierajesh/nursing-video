@@ -1,0 +1,25 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "nurse": {},
+  "charge": {},
+  "prescriber": {
+    "empty": 0.481,
+    "notice": 1.851,
+    "queue": 1.965
+  },
+  "notice": {
+    "x": 537.7747192382812,
+    "y": 24.780561447143555,
+    "width": 294.40228271484375,
+    "height": 19.758543014526367
+  },
+  "badge": {
+    "x": 1117.5,
+    "y": 113,
+    "width": 215.5,
+    "height": 24.5
+  },
+  "errors": [],
+  "unexpected": []
+}

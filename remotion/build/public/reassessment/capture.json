@@ -1,0 +1,17 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "nurse": {
+    "baseline": 0.591,
+    "selection": 2.093,
+    "reason": 3.108,
+    "noteFocus": 4.116,
+    "typing": 5.11,
+    "typed": 6.398,
+    "submit": 8.475,
+    "result": 10.658
+  },
+  "charge": {},
+  "errors": [],
+  "unexpected": []
+}

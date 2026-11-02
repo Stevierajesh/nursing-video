@@ -1,0 +1,33 @@
+{
+  "browserOnly": true,
+  "noLiveWrites": true,
+  "illustrative": true,
+  "nurse": {
+    "high": 1.428,
+    "watch": 3.791,
+    "clear": 6.164
+  },
+  "charge": {},
+  "stages": {
+    "high": {
+      "red": true,
+      "amber": false
+    },
+    "watch": {
+      "red": false,
+      "amber": true
+    },
+    "clear": {
+      "red": false,
+      "amber": false
+    }
+  },
+  "room": {
+    "x": 904.229248046875,
+    "y": 702.2838134765625,
+    "width": 344.4322509765625,
+    "height": 205.2239990234375
+  },
+  "errors": [],
+  "unexpected": []
+}

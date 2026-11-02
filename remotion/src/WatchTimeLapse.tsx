@@ -4,18 +4,35 @@ import { C } from "./Type";
 
 // Recorded endpoints, with illustrative samples connecting them for the demo.
 // This replay is authored for the film and never writes patient observations.
+// The replay runs from the 5:01:25 PM baseline to 5:11:25 PM, which is the very
+// observation the reassessment capture opens on ("observed just now · 5:11:25
+// PM", HR 129 · RR 26 · BP 75/52 · 36.9). The final sample is therefore pinned
+// to that recorded reading so the two screens describe one moment, not two.
 const MINUTES = [0, 2, 4, 6, 7, 8, 9, 10];
 const SERIES = {
-  heart_rate: [88, 90, 93, 96, 98, 101, 104, 106],
-  resp_rate: [18, 18, 19, 19, 20, 21, 21, 22],
+  heart_rate: [88, 90, 94, 100, 107, 115, 123, 129],
+  resp_rate: [18, 18, 19, 20, 21, 23, 24, 26],
   spo2: [96, 96, 96, 96, 96, 96, 96, 96],
-  systolic_bp: [118, 115, 110, 106, 104, 103, 103, 101],
-  diastolic_bp: [74, 73, 70, 68, 67, 67, 66, 66],
-  temperature_c: [36.9, 36.9, 36.8, 36.8, 36.9, 36.9, 36.9, 37.0],
+  systolic_bp: [118, 115, 110, 103, 96, 88, 81, 75],
+  diastolic_bp: [74, 73, 70, 66, 62, 58, 55, 52],
+  temperature_c: [36.9, 36.9, 36.8, 36.8, 36.9, 36.9, 36.9, 36.9],
 };
 type VitalKey = keyof typeof SERIES;
 const minutesAt = (frame: number) => interpolate(frame, [60, 254], [0, 10], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 const readingAt = (key: VitalKey, minutes: number) => interpolate(minutes, MINUTES, SERIES[key]);
+/* Real NEWS thresholds rather than the earlier 1/2/1 approximation, which
+   topped out at 4 and so handed off to a page reading NEWS 8. This runs 0 at
+   the baseline to 8 at 5:11:25 PM, matching both ends. */
+const newsAt = (minutes: number) => {
+  const hr = Math.round(readingAt("heart_rate", minutes));
+  const rr = Math.round(readingAt("resp_rate", minutes));
+  const sbp = Math.round(readingAt("systolic_bp", minutes));
+  return (hr >= 131 ? 3 : hr >= 111 ? 2 : hr >= 91 ? 1 : 0)
+    + (rr >= 25 ? 3 : rr >= 21 ? 2 : 0)
+    + (sbp <= 90 ? 3 : sbp <= 100 ? 2 : sbp <= 110 ? 1 : 0);
+};
+// The app's own banding, from nursing-app's risk.ts.
+const newsBandLabel = (news: number) => news === 0 ? "Zero" : news >= 7 ? "High" : news >= 5 ? "Medium" : "Low";
 // Match the first-assessment capture's 5:01:25 PM baseline. Format explicitly
 // so the demo clock stays identical in Studio and renders in any time zone.
 const BASELINE_CLOCK_SECONDS = 17 * 3600 + 60 + 25;
@@ -31,12 +48,14 @@ const LiveVital: React.FC<{ field: VitalKey; label: string; unit: string; baseli
   const minutes = minutesAt(frame);
   const value = readingAt(field, minutes);
   const rounded = Math.round(value);
-  const tone = field === "heart_rate" && rounded > 100 ? C.watch
-    : field === "resp_rate" && rounded >= 21 ? C.elev
-    : field === "systolic_bp" && rounded <= 110 ? C.watch : C.teal;
-  const flag = field === "heart_rate" && rounded > 100 ? "Watch"
-    : field === "resp_rate" && rounded >= 21 ? "Elevated"
-    : field === "systolic_bp" && rounded <= 110 ? "Low" : "";
+  /* Flags escalate with the reading so the final tile matches the reassessment
+     page it hands off to: heart rate Elevated, respiratory rate High, BP Low. */
+  const tone = field === "heart_rate" ? (rounded > 110 ? C.elev : rounded > 100 ? C.watch : C.teal)
+    : field === "resp_rate" ? (rounded >= 25 ? C.high : rounded >= 21 ? C.elev : C.teal)
+    : field === "systolic_bp" ? (rounded <= 90 ? C.high : rounded <= 110 ? C.watch : C.teal) : C.teal;
+  const flag = field === "heart_rate" ? (rounded > 110 ? "Elevated" : rounded > 100 ? "Watch" : "")
+    : field === "resp_rate" ? (rounded >= 25 ? "High" : rounded >= 21 ? "Elevated" : "")
+    : field === "systolic_bp" ? (rounded <= 110 ? "Low" : "") : "";
   // Keep a full history window on screen from the start. New observations
   // enter at the right edge while the established baseline scrolls left.
   const points = Array.from({ length: 65 }, (_, index) => {
@@ -66,10 +85,8 @@ export const WatchTimeLapseScreen: React.FC = () => {
   const frame = useCurrentFrame();
   const minutes = minutesAt(frame);
   const score = Math.round(interpolate(minutes, [0, 5, 10], [3, 4, 5]));
-  const news = (Math.round(readingAt("heart_rate", minutes)) > 90 ? 1 : 0)
-    + (Math.round(readingAt("resp_rate", minutes)) >= 21 ? 2 : 0)
-    + (Math.round(readingAt("systolic_bp", minutes)) <= 110 ? 1 : 0);
-  const bandColor = score >= 4 ? C.watch : C.low;
+  const news = newsAt(minutes);
+  const bandColor = news >= 7 ? C.high : score >= 4 ? C.watch : C.low;
   return <div style={{ position: "relative", width: 1366, height: 1024, scale: 1000 / 1366, transformOrigin: "top left", fontFamily: C.sans }}>
     <Freeze frame={0}>
       <OffthreadVideo src={staticFile("act4.webm")} startFrom={552} muted style={{ width: 1366, height: 1024 }} />
@@ -82,10 +99,10 @@ export const WatchTimeLapseScreen: React.FC = () => {
       <div style={{ fontSize: 10, marginTop: 6 }}>Demo {clockTime(minutes)} · RR {Math.round(readingAt("resp_rate", minutes))} · SpO₂ 96% · HR {Math.round(readingAt("heart_rate", minutes))}</div>
     </div>
     <div style={{ position: "absolute", left: 59, top: 242, width: 612, height: 90, boxSizing: "border-box", padding: "13px 16px",
-      borderRadius: 18, border: `1px solid ${bandColor}50`, background: score >= 4 ? "#f3ead9" : "#e0efe7", color: bandColor, boxShadow: `0 0 0 3px ${C.canvas}`,
+      borderRadius: 18, border: `1px solid ${bandColor}50`, background: news >= 7 ? "#fbe9e9" : score >= 4 ? "#f3ead9" : "#e0efe7", color: bandColor, boxShadow: `0 0 0 3px ${C.canvas}`,
       display: "flex", flexDirection: "column", gap: 6 }}>
       <div style={{ fontSize: 16, fontWeight: 700 }}>Assessment recorded · monitoring continues</div>
-      <div style={{ fontSize: 12, color: C.muted }}>NEWS {news} · {news === 0 ? "Zero" : "Low"}</div>
+      <div style={{ fontSize: 12, color: C.muted }}>NEWS {news} · {newsBandLabel(news)}</div>
       <div style={{ fontSize: 12, color: C.muted }}>Combined score {score}/10</div>
     </div>
     <div style={{ position: "absolute", left: 59, top: 352, width: 612, height: 477, padding: 15, boxSizing: "border-box",
@@ -98,11 +115,13 @@ export const WatchTimeLapseScreen: React.FC = () => {
         <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.teal }} />Simulated observations · {clockTime(minutes)}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
-        <LiveVital field="heart_rate" label="Heart rate" unit="bpm" baseline="78 bpm" domain={[78, 115]} />
-        <LiveVital field="resp_rate" label="Respiratory rate" unit="/min" baseline="16 /min" domain={[16, 25]} />
+        {/* Domains widened to hold the new endpoints; the trend lines stay
+            continuous and inside their boxes instead of running off the top. */}
+        <LiveVital field="heart_rate" label="Heart rate" unit="bpm" baseline="78 bpm" domain={[78, 135]} />
+        <LiveVital field="resp_rate" label="Respiratory rate" unit="/min" baseline="16 /min" domain={[16, 28]} />
         <LiveVital field="spo2" label="Oxygen saturation" unit="%" baseline="98 %" domain={[90, 100]} />
-        <LiveVital field="systolic_bp" label="Systolic BP" unit="mmHg" baseline="124 mmHg" domain={[95, 125]} />
-        <LiveVital field="diastolic_bp" label="Diastolic BP" unit="mmHg" baseline="78 mmHg" domain={[60, 80]} />
+        <LiveVital field="systolic_bp" label="Systolic BP" unit="mmHg" baseline="124 mmHg" domain={[70, 125]} />
+        <LiveVital field="diastolic_bp" label="Diastolic BP" unit="mmHg" baseline="78 mmHg" domain={[50, 80]} />
         <LiveVital field="temperature_c" label="Temperature" unit="°C" baseline="36.8 °C" domain={[36.5, 37.5]} />
       </div>
       <div style={{ fontSize: 10, color: C.muted, marginTop: "auto" }}>Illustrative replay between recorded observations · each trend uses its own scale</div>

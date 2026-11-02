@@ -30,6 +30,15 @@ export const PatientIntro: React.FC = () => {
         <div style={{ maxWidth: 1100, marginTop: 4 }}>
           <Sub d={62} revealFrames={24}>Admitted with swelling in his feet and legs,<br />with cramping.</Sub>
         </div>
+        {/* Names Sally here so she is not an unintroduced voice at 0:49. Role and
+            unit come from the app's own /me payload; she is his assigned nurse
+            in the queue, so nothing beyond that is claimed. */}
+        <div style={{ maxWidth: 1100, marginTop: 4 }}>
+          <Sub d={82} revealFrames={24}>Cared for by his nurse, <span style={{
+            fontWeight: 700, textDecoration: "underline",
+            textDecorationThickness: 2, textUnderlineOffset: "0.16em",
+          }}>Sally Osborn</span>.</Sub>
+        </div>
       </div>
     </AbsoluteFill>
   );

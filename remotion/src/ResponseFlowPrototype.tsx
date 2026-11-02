@@ -84,7 +84,7 @@ const ConcernEntry: React.FC = () => (
       <Caption label="First assessment" title={<>The observations<br />are calm.</>}>Everything seemed normal</Caption>
     </Sequence>
     <Sequence name="The nurse notices" from={50 + BASELINE_HOLD_FRAMES} durationInFrames={100}>
-      <Caption label="Nurse concern" title={<>But she has<br />seen this before.</>} />
+      <Caption label="Nurse concern" title={<>But Sally has<br />seen this before.</>} />
     </Sequence>
   </AbsoluteFill>
 );

@@ -34,7 +34,7 @@ export const ColdOpen: React.FC = () => (
     <Sequence name="The admission" from={CLOCK} durationInFrames={ADMISSION}>
       <Scene dur={ADMISSION}>
         <Wipe d={1} revealFrames={24}>
-          <div style={{ fontFamily: C.sans, fontSize: 30, color: C.ink }}>A patient admitted for a kidney stone</div>
+          <div style={{ fontFamily: C.sans, fontSize: 30, color: C.ink }}>A patient was admitted for a kidney stone</div>
         </Wipe>
         <Head d={42} size={76} revealFrames={24}>Suddenly, she wasn&apos;t acting like herself.</Head>
         <Sub d={84} revealFrames={24}>Her nurse noticed. The monitors didn&apos;t.</Sub>
@@ -126,7 +126,8 @@ export const Outro: React.FC = () => (
     <Lockup d={4} tagline="Hear the worry, act on time" />
     <div style={{ fontFamily: C.sans, fontSize: 38, lineHeight: 1.45, color: C.muted }}>
       <Wipe d={24}>Nurse worry + vitals · Closed-loop escalation</Wipe>
-      <Wipe d={42}>Physician-gated approval</Wipe>
+      {/* The physician review act is no longer in the film; don't advertise it. */}
+      <Wipe d={42}>Every concern answered on the record</Wipe>
     </div>
     <div style={{ position: "absolute", left: 100, right: 100, bottom: 72,
       textAlign: "center", fontFamily: C.sans, fontSize: 24, color: C.muted }}>
